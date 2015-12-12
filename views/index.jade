@@ -1,0 +1,12 @@
+h1 Create Game
+form(action="/games" method="post")
+	input(name="name", placeholder="Your Name")
+	button(type="submit")
+		| Create Game
+
+h1 Join Game
+form(action="/games/join" method="post")
+	input(name="name", placeholder="Your Name")
+	input(name="slug",  placeholder="Game Code")
+	button(type="submit")
+		| Join

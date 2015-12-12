@@ -1,0 +1,11 @@
+h1 In Game #{game.slug}
+
+ul#players
+	each player in game.players
+		li= player.name
+
+script.
+	var socket = io();
+	socket.on('player joined', function(msg){
+		$('#players').append($('<li>').text(msg));
+	});
