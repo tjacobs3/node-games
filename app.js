@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-app.use(express.static(__dirname + '/bower_components'));
+app.use(express.static('public'));
 app.use(session({ secret: 'sdfasdfsd3nksdf', cookie: { maxAge: 60000 }}))
 
 // Views Options
