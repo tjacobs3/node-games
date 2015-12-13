@@ -11,7 +11,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 
 // OUR MODELS
-var Game = require(__dirname + '/models/game.js');
+var TicTacToe = require(__dirname + '/models/game_types/tic_tac_toe.js');
 
 //***************
 // EXPRESS SETUP
@@ -43,29 +43,44 @@ app.get('/', function(req, res, next) {
 });
 
 app.post('/games', function(req, res, next) {
-  g = new Game();
+  g = new TicTacToe();
   games.push(g);
   var player = g.join(req.body.name);
+  g.io = io;
 
   res.locals.game = g;
   res.locals.player = player;
-  res.render('games/show.jade');
+  res.render('games/' + g.gameIdentifier + '.jade');
 });
 
 app.post('/games/join', function(req, res) {
   var game = findGameBySlug(req.body.slug);
   var player = game.join(req.body.name);
-  io.emit('player joined', player.name);
 
-  res.locals.game = g;
-  res.locals.player = player;
-  res.render('games/show.jade');
+  if(player == null) {
+    res.locals.warning = "Game is full!";
+    res.render('index.jade');
+  } else{
+    res.locals.game = g;
+    res.locals.player = player;
+    res.render('games/' + g.gameIdentifier + '.jade');
+  }
 });
 
 
 // SOCKET STUFF
 io.on('connection', function(socket) {
   console.log('Client connected...');
+
+  // TODO: Learn how to use channels
+  socket.on('perform action', function(msg){
+    if(msg.gameSlug) {
+      var game = findGameBySlug(msg.gameSlug);
+      if(game) {
+        game.action(msg)
+      }
+    }
+  });
 });
 
 //***************

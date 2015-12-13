@@ -1,0 +1,27 @@
+link(rel='stylesheet', href='/css/tictactoe.css')
+
+#player-info(data-playerId=player.id, data-gameSlug=game.slug)
+
+.game-header
+  h1 Tic Tac Toe
+  h2 #{game.slug}
+
+  div#players
+    each player in game.players
+      div= player.name
+
+  div#status= game.status()
+
+#game-board
+  table
+    - var j = 0
+    while j < game.gameBoardSize
+      tr
+        - var i = 0
+        while i < game.gameBoardSize
+          td.cell(data-x=i, data-y=j)
+          - i++
+      - j++
+        
+script(src="/scripts/game_client.js")
+script(src="/scripts/games/tictactoe.js")

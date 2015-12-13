@@ -1,5 +1,14 @@
 var socket = io();
 
 socket.on('player joined', function(msg){
-  $('#players').append($('<li>').text(msg));
+  $('#players').append($('<div>').text(msg));
 });
+
+
+function playerId() {
+  return $("#player-info").data("playerid");
+}
+
+function gameSlug() {
+  return $("#player-info").data("gameslug");
+}
