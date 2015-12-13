@@ -12,3 +12,7 @@ function playerId() {
 function gameSlug() {
   return $("#player-info").data("gameslug");
 }
+
+$(function() {
+  socket.emit('join game', {gameSlug: gameSlug()});
+});

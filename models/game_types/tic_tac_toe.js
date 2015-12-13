@@ -116,18 +116,18 @@ TicTacToe.prototype.action = function(opts) {
 
 TicTacToe.prototype.playerJoined = function(player) {
   if(this.isGameStarted()) {
-    this.io.emit('player joined', player.name);
+    this.io.to(this.slug).emit('player joined', player.name);
     this.sendStatus();
   }
 }
 
 TicTacToe.prototype.boardUpdated = function(x, y, symbol) {
-  this.io.emit('board updated', {x: x, y: y, symbol: symbol});
+  this.io.to(this.slug).emit('board updated', {x: x, y: y, symbol: symbol});
   this.sendStatus();
 }
 
 TicTacToe.prototype.sendStatus = function() {
-  this.io.emit('status', this.status());
+  this.io.to(this.slug).emit('status', this.status());
 }
 
 

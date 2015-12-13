@@ -3,7 +3,9 @@ socket.on('status', function(msg){
 });
 
 socket.on('board updated', function(msg) {
-  $(".cell[data-x='" + msg.x + "'][data-y='" + msg.y + "']").text(msg.symbol);
+  var cell = $(".cell[data-x='" + msg.x + "'][data-y='" + msg.y + "']");
+  cell.text(msg.symbol);
+  cell.addClass(msg.symbol);
 });
 
 

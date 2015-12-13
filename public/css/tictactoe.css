@@ -2,6 +2,7 @@
   table {
     border-collapse: collapse;
     margin: auto;
+    font-family: sans-serif;
   }
 
   table, th, td {
@@ -11,4 +12,14 @@
   .cell {
     width: 100px;
     height: 100px;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  .X {
+    color: red;
+  }
+
+  .O {
+    color: blue;
   }

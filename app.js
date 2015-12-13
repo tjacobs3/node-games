@@ -72,6 +72,10 @@ app.post('/games/join', function(req, res) {
 io.on('connection', function(socket) {
   console.log('Client connected...');
 
+  socket.on('join game', function(msg) {
+    socket.join(msg.gameSlug);
+  });
+
   // TODO: Learn how to use channels
   socket.on('perform action', function(msg){
     if(msg.gameSlug) {
