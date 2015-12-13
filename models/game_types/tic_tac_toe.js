@@ -51,6 +51,7 @@ TicTacToe.prototype.makeMove = function(x, y) {
   if(this.validMove(x, y)) {
     var symbol = this.currentTurn;
     this.gameBoard[x][y] = this.currentTurn;
+    this.checkWinner(symbol, this.currentPlayer());
     this.currentTurn = this.currentTurn == "X" ? "O" : "X";
     this.boardUpdated(x, y, symbol);
   }
@@ -58,14 +59,49 @@ TicTacToe.prototype.makeMove = function(x, y) {
 };
 
 TicTacToe.prototype.validMove = function(x, y) {
-  var inBounds = x >= 0 && x < this.gameBoardSize && y >= 0 && y < this.gameBoardSize;
   var occupied = !!this.gameBoard[x][y];
-  return inBounds && !occupied && !this.winner && this.isGameStarted();
+  return this.inBounds(x, y) && !occupied && !this.winner && this.isGameStarted();
 };
 
 TicTacToe.prototype.isGameStarted = function() {
   return this.players.length == this.maxPlayers;
 };
+
+TicTacToe.prototype.inBounds = function(x, y) {
+  var xInBounds = x >= 0 && x < this.gameBoardSize;
+  var yInBounds = y >= 0 && y < this.gameBoardSize;
+  return xInBounds && yInBounds;
+};
+
+TicTacToe.prototype.checkWinner = function(symbol, player) {
+  if(!!this.winner) return this.winner;
+
+  for (x = 0; x < this.gameBoardSize; x++) {
+    for (y = 0; y < this.gameBoardSize; y++) {
+      var    won = this.check3(symbol, x, y, 1, 0);
+      won = won || this.check3(symbol, x, y, 0, 1);
+      won = won || this.check3(symbol, x, y, 1, 1);
+      won = won || this.check3(symbol, x, y, 1, -1);
+
+      if(won) {
+        this.winner = player;
+      }
+    }
+  }
+};
+
+TicTacToe.prototype.check3 = function(symbol, x, y, dirX, dirY) {
+  var count = 0;
+  while(this.inBounds(x, y)) {
+    if(this.gameBoard[x][y] === symbol)
+      ++count;
+
+    x += dirX;
+    y += dirY;
+  }
+
+  return count == 3;
+}
 
 //***************
 // EVENTS
