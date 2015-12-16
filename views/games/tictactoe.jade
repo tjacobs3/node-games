@@ -19,7 +19,8 @@ link(rel='stylesheet', href='/css/tictactoe.css')
       tr
         - var i = 0
         while i < game.gameBoardSize
-          td.cell(data-x=i, data-y=j)
+          td.cell(data-x=i, data-y=j, class=game.getLocation(i, j))
+            = game.getLocation(i, j)
           - i++
       - j++
         

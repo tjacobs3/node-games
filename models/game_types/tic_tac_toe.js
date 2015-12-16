@@ -103,6 +103,14 @@ TicTacToe.prototype.check3 = function(symbol, x, y, dirX, dirY) {
   return count == 3;
 }
 
+TicTacToe.prototype.getLocation = function(x, y) {
+  if(this.inBounds(x, y)) {
+    return this.gameBoard[x][y];
+  } else {
+    return "";
+  }
+}
+
 //***************
 // EVENTS
 //***************

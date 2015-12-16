@@ -45,7 +45,7 @@ app.get('/', function(req, res, next) {
 app.post('/games', function(req, res, next) {
   g = new TicTacToe();
   games.push(g);
-  var player = g.join(req.body.name);
+  var player = joinGame(g, req.body.name, req);
   g.io = io;
 
   res.locals.game = g;
@@ -55,20 +55,42 @@ app.post('/games', function(req, res, next) {
 
 app.post('/games/join', function(req, res) {
   var game = findGameBySlug(req.body.slug);
-  var player = game.join(req.body.name);
+  var player = joinGame(game, req.body.name, req);
 
   if(player == null) {
     res.locals.warning = "Game is full!";
     res.render('index.jade');
   } else{
-    res.locals.game = g;
+    res.locals.game = game;
     res.locals.player = player;
-    res.render('games/' + g.gameIdentifier + '.jade');
+    res.render('games/' + game.gameIdentifier + '.jade');
   }
 });
 
 
+//***************
+// HELPERS
+//***************
+
+function joinGame(game, name, request) {
+  var sess = request.session;
+  var player;
+
+  // Try to join by saved player id first
+  if(sess[game.slug])
+    player = game.findPlayer(sess[game.slug]);
+
+  if(!player)
+    player = game.join(name);
+
+  sess[game.slug] = player.id;
+
+  return player;
+}
+
+//***************
 // SOCKET STUFF
+//***************
 io.on('connection', function(socket) {
   console.log('Client connected...');
 
