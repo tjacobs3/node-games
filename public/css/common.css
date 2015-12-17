@@ -5,3 +5,15 @@
 #player-info {
   display: none;
 }
+
+.button {
+  cursor: pointer;
+  padding: 1em 2em;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+}
+
+.font--large {
+  font-size: 1.2em;
+}

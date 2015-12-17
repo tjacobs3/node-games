@@ -1,7 +1,7 @@
 //***************
 // DEPENDENCY LOADING
 //***************
-var _ = require('underscore')
+var _ = require('underscore');
 var express = require('express');
 var layout = require('express-layout');
 var jade = require('jade');
