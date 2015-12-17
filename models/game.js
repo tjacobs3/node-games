@@ -1,7 +1,8 @@
 var Player = require(__dirname + '/player.js');
 var _ = require('underscore')
 
-var Game = function() {
+var Game = function(io) {
+  this.io = io;
   this.slug = Game.newSlug();
   this.players = [];
 };

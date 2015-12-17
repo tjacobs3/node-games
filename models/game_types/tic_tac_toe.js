@@ -1,9 +1,9 @@
 var Game = require(__dirname + '/../game.js');
 
-var TicTacToe = function() {
-  Game.call(this);
+var TicTacToe = function(io) {
+  Game.call(this, io);
 
-  this.gameIdentifier = "tictactoe";
+  this.gameIdentifier = TicTacToe.gameIdentifier;
   this.maxPlayers = 2;
   this.playerSymbols = {"X": null, "O": null};
   this.currentTurn = "X";
@@ -11,6 +11,8 @@ var TicTacToe = function() {
   this.gameBoardSize = 3;
   this.winner = null;
 }
+
+TicTacToe.gameIdentifier = "tictactoe";
 
 TicTacToe.prototype = Object.create(Game.prototype);
 TicTacToe.prototype.constructor = TicTacToe;

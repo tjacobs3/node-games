@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 
 // OUR MODELS
 var TicTacToe = require(__dirname + '/models/game_types/tic_tac_toe.js');
+var IrishPoker = require(__dirname + '/models/game_types/irish_poker.js');
 
 //***************
 // EXPRESS SETUP
@@ -43,10 +44,10 @@ app.get('/', function(req, res, next) {
 });
 
 app.post('/games', function(req, res, next) {
-  g = new TicTacToe();
+  var gameType = findGameTypeByIdentifier(req.body.game_identifier)
+  g = new gameType(io);
   games.push(g);
   var player = joinGame(g, req.body.name, req);
-  g.io = io;
 
   res.locals.game = g;
   res.locals.player = player;
@@ -80,10 +81,13 @@ function joinGame(game, name, request) {
   if(sess[game.slug])
     player = game.findPlayer(sess[game.slug]);
 
+  // Try to join game by supplied name
   if(!player)
     player = game.join(name);
 
-  sess[game.slug] = player.id;
+  // Save the player if available
+  if(!!player)
+    sess[game.slug] = player.id;
 
   return player;
 }
@@ -113,8 +117,14 @@ io.on('connection', function(socket) {
 // GAME STORE
 //***************
 var games = []
+var gameTypes = [IrishPoker, TicTacToe]
 
 // Helpers
+function findGameTypeByIdentifier(identifier) {
+  var type = _.find(gameTypes, function(type){ return type.gameIdentifier == identifier; });
+  return type;
+}
+
 function findGameBySlug(slug) {
   var game = _.find(games, function(game){ return game.slug == slug; });
   return game;
