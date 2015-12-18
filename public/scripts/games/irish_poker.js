@@ -1,32 +1,39 @@
 var IrishPoker = function() {
   GameClient.call(this);
 
-  this.socket.on('status', this.setStatus.bind(this));
+  this.socket.on('status', this.setGameState.bind(this));
 
   $("#start-button").click(this.startButtonClicked.bind(this));
-  this.setStatus($("#player-info").data("status"));
+
+  this.setGameState(this.playerInfo.status);
 };
 
 IrishPoker.prototype = Object.create(GameClient.prototype);
 IrishPoker.prototype.constructor = IrishPoker;
 
-IrishPoker.prototype.setStatus = function(status) {
-  var msg = "";
-  switch(status.status) {
-    case "waiting_for_game_start":
-      msg = "Waiting for game to start";
-      break;
-    default:
-      this.handleGameStarted();
-      this.displayCards(status);
-      msg = "Player turn: " + status.current_turn;
-  }
+IrishPoker.prototype.setGameState = function(status) {
+  this.gameStatus = status.status;
+  this.currentTurn = status.current_turn;
+  this.players = status.players;
 
-  $("#status").text(msg);
+  this.setTitle();
+
+  if(this.gameStatus != "waiting_for_game_start") {
+    this.handleGameStarted();
+    this.displayCards();
+  }
+}
+
+IrishPoker.prototype.setTitle = function() {
+  var statusElement = $("#status");
+  if(this.gameStatus == "waiting_for_game_start")
+    statusElement.text("Waiting for game to start");
+  else
+    statusElement.text("Player turn: " + this.currentTurn);
 };
 
-IrishPoker.prototype.displayCards = function(status) {
-  var player = this.findPlayer(status, this.playerId());
+IrishPoker.prototype.displayCards = function() {
+  var player = this.findPlayer(this.playerId());
   $("#my-cards").text(player.cards.join());
 };
 
@@ -34,8 +41,8 @@ IrishPoker.prototype.handleGameStarted = function() {
   $("#start-button").remove();
 };
 
-IrishPoker.prototype.findPlayer = function(status, id) {
-  return _.find(status.players, function(player){ return player.id == id; });
+IrishPoker.prototype.findPlayer = function(id) {
+  return _.find(this.players, function(player){ return player.id == id; });
 };
 
 IrishPoker.prototype.startButtonClicked = function() {
