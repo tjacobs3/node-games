@@ -17,6 +17,9 @@ IrishPoker.STATUSES = {
   waiting_for_game_start: "waiting_for_game_start",
   game_started: "game_started"
 }
+IrishPoker.CARD_VALUES = {
+  "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10, "J": 11, "Q": 12, "K": 13, "A": 14
+}
 
 IrishPoker.prototype = Object.create(Game.prototype);
 IrishPoker.prototype.constructor = IrishPoker;
@@ -77,10 +80,80 @@ IrishPoker.prototype.handlePlayerAction = function(playerId, action) {
   if(playerId != this.currentPlayer().id)
     return;
 
+  switch(this.currentRound) {
+    case 0:
+      this.handleRedBlack(action);
+      break;
+    case 1:
+      this.handleOverUnder(action);
+      break;
+    case 2:
+      this.handleInsideOutside(action);
+      break;
+  }
+
   this.currentPlayer().cards[this.currentRound].faceDown = false;
   this.incrementTurn();
 
   this.sendStatus();
+}
+
+IrishPoker.prototype.handleRedBlack = function(action) {
+  var card = this.currentPlayer().cards[this.currentRound];
+  if(action == "red") {
+    if (card.suit == "heart" || card.suit == "diamond")
+      this.sendMessage(this.currentPlayer().name + " guessed RED and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed RED and was WRONG");
+  } else {
+    if (card.suit == "spade" || card.suit == "club")
+      this.sendMessage(this.currentPlayer().name + " guessed BLACK and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed BLACK and was WRONG");
+  }
+}
+
+IrishPoker.prototype.handleOverUnder = function(action) {
+  var lastCard = this.currentPlayer().cards[this.currentRound - 1];
+  var card = this.currentPlayer().cards[this.currentRound];
+
+  if(action == "over") {
+    if (IrishPoker.CARD_VALUES[card.value] > IrishPoker.CARD_VALUES[lastCard.value])
+      this.sendMessage(this.currentPlayer().name + " guessed OVER and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed OVER and was WRONG");
+  } else {
+    if (IrishPoker.CARD_VALUES[card.value] < IrishPoker.CARD_VALUES[lastCard.value])
+      this.sendMessage(this.currentPlayer().name + " guessed UNDER and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed UNDER and was WRONG");
+  }
+}
+
+IrishPoker.prototype.handleInsideOutside = function(action) {
+  var firstCard = this.currentPlayer().cards[this.currentRound - 2];
+  var secondCard = this.currentPlayer().cards[this.currentRound - 1];
+  var card = this.currentPlayer().cards[this.currentRound];
+
+  if(action == "inside") {
+    if (this.numberInside(IrishPoker.CARD_VALUES[card.value], IrishPoker.CARD_VALUES[firstCard.value], IrishPoker.CARD_VALUES[secondCard.value]))
+      this.sendMessage(this.currentPlayer().name + " guessed INSIDE and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed INSIDE and was WRONG");
+  } else {
+    if (this.numberOutside(IrishPoker.CARD_VALUES[card.value], IrishPoker.CARD_VALUES[firstCard.value], IrishPoker.CARD_VALUES[secondCard.value]))
+      this.sendMessage(this.currentPlayer().name + " guessed OUTSIDE and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed OUTSIDE and was WRONG");
+  }
+}
+
+IrishPoker.prototype.numberInside = function(x, y, z) {
+  return (x > y && x < z) || (x > z && x < y)
+}
+
+IrishPoker.prototype.numberOutside = function(x, y, z) {
+  return (x > y && x > z) || (x < z && x < y)
 }
 
 //***************
@@ -132,6 +205,10 @@ IrishPoker.prototype.sendStatus = function() {
 
 IrishPoker.prototype.playerJoined = function(player) {
   this.io.to(this.slug).emit('player joined', player.name);
+}
+
+IrishPoker.prototype.sendMessage = function(message) {
+  this.io.to(this.slug).emit('message', {message: message});
 }
 
 module.exports = IrishPoker

@@ -2,6 +2,7 @@ var IrishPoker = function() {
   GameClient.call(this);
 
   this.socket.on('status', this.setGameState.bind(this));
+  this.socket.on('message', this.addMessage.bind(this));
 
   $("#start-button").click(this.startButtonClicked.bind(this));
 
@@ -10,6 +11,11 @@ var IrishPoker = function() {
 
 IrishPoker.prototype = Object.create(GameClient.prototype);
 IrishPoker.prototype.constructor = IrishPoker;
+
+IrishPoker.prototype.addMessage = function(msg) {
+  $message = $(IrishPoker.messageRow({text: msg.message}));
+  $("#messages").prepend($message);
+}
 
 IrishPoker.prototype.setGameState = function(status) {
   this.gameStatus = status.status;
@@ -67,7 +73,6 @@ IrishPoker.prototype.startButtonClicked = function() {
 };
 
 IrishPoker.prototype.playerAction = function(value) {
-  console.log("HERE!!!", value)
   this.socket.emit('perform action', {
     playerId: this.playerId(),
     action: "player action",
@@ -85,9 +90,19 @@ IrishPoker.prototype.setupTurn = function() {
       case 0:
         this.red_black_round();
         break;
+      case 1:
+        this.over_under_round();
+        break;
+      case 2:
+        this.outside_inside_round();
+        break;
     }
   }
 };
+
+//***************
+// UI FOR ROUNDS
+//***************
 
 IrishPoker.prototype.red_black_round = function() {
   $redButton = $(IrishPoker.button({text: "Card is Red"}));
@@ -101,9 +116,30 @@ IrishPoker.prototype.red_black_round = function() {
   $blackButton.click(function() { that.playerAction("black"); });
 }
 
+IrishPoker.prototype.over_under_round = function() {
+  $overButton = $(IrishPoker.button({text: "Over"}));
+  $underButton = $(IrishPoker.button({text: "Under"}));
+  $("#actions").append($overButton);
+  $("#actions").append($underButton);
+
+  var that = this;
+  $overButton.click(function() { that.playerAction("over"); });
+  $underButton.click(function() { that.playerAction("under"); });
+}
+
+IrishPoker.prototype.outside_inside_round = function() {
+  $outsideButton = $(IrishPoker.button({text: "Outside"}));
+  $insideButton = $(IrishPoker.button({text: "Inside"}));
+  $("#actions").append($outsideButton);
+  $("#actions").append($insideButton);
+
+  var that = this;
+  $outsideButton.click(function() { that.playerAction("outside"); });
+  $insideButton.click(function() { that.playerAction("inside"); });
+}
 
 IrishPoker.button = _.template("<div class='button font--large'><%- text %></div>");
-
+IrishPoker.messageRow = _.template("<div><%- text %></div>");
 
 
 $(function() {
