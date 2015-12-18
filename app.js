@@ -102,7 +102,6 @@ io.on('connection', function(socket) {
     socket.join(msg.gameSlug);
   });
 
-  // TODO: Learn how to use channels
   socket.on('perform action', function(msg){
     if(msg.gameSlug) {
       var game = findGameBySlug(msg.gameSlug);

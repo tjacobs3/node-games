@@ -1,0 +1,35 @@
+
+.card {
+  margin: 1em;
+  width: 4em;
+  height: 5.6em;
+  line-height: 5.6;
+  background-color: black;
+  display: inline-block;
+  font-size: 2em;
+  border: 2px solid black;
+}
+
+.revealed {
+  background-color: white;
+}
+
+.revealed.spade {
+  color: black;
+}
+
+.revealed.club {
+  color: black;
+}
+
+.revealed.heart {
+  color: red;
+}
+
+.revealed.diamond {
+  color: red;
+}
+
+.background--red {
+  background-color: red;
+}

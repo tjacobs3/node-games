@@ -6,6 +6,7 @@ var IrishPoker = function(io) {
   Game.call(this, io);
 
   this.gameIdentifier = IrishPoker.gameIdentifier;
+  this.currentRound = 0;
   this.maxPlayers = 8;
   this.currentTurn = 0;
   this.gameStarted = false;
@@ -35,9 +36,11 @@ IrishPoker.prototype.currentPlayer = function(){
 };
 
 IrishPoker.prototype.incrementTurn = function(){
-  currentTurn += 1;
-  if(currentTurn >= this.players.length)
-    currentTurn = 0;
+  this.currentTurn += 1;
+  if(this.currentTurn >= this.players.length) {
+    this.currentTurn = 0;
+    this.currentRound += 1;
+  }
 };
 
 IrishPoker.prototype.startGame = function(){
@@ -55,7 +58,9 @@ IrishPoker.prototype.dealCards = function() {
 
   _.each(this.players, function(player) {
     for (i = 0; i < 4; i++) {
-      player.cards.push(deck.draw());
+      card = deck.draw();
+      card.faceDown = true;
+      player.cards.push(card);
     }
   });
 };
@@ -68,6 +73,16 @@ IrishPoker.prototype.status = function() {
   };
 };
 
+IrishPoker.prototype.handlePlayerAction = function(playerId, action) {
+  if(playerId != this.currentPlayer().id)
+    return;
+
+  this.currentPlayer().cards[this.currentRound].faceDown = false;
+  this.incrementTurn();
+
+  this.sendStatus();
+}
+
 //***************
 // SERIALIZER
 //***************
@@ -76,13 +91,20 @@ IrishPoker.prototype.serialize = function() {
   var players = _.map(this.players, function(player) {
     return {
       id: player.id,
-      cards: _.map(player.cards, function(card) { return card.unicodeString(); })
+      name: player.name,
+      cards: _.map(player.cards, function(card) { return {
+        string: card.unicodeString(),
+        suit: card.suit,
+        faceDown: card.faceDown,
+        value: card.value };
+      })
     }
   });
 
   return {
     status: this.status(),
-    current_turn: this.currentPlayer().name,
+    currentTurn: this.currentPlayer().id,
+    currentRound: this.currentRound,
     players: players
   }
 }
@@ -95,6 +117,9 @@ IrishPoker.prototype.action = function(opts) {
   switch(opts.action) {
     case "start game":
       this.startGame();
+      break;
+    case "player action":
+      this.handlePlayerAction(opts.playerId, opts.value);
       break;
     default:
       // Do nothing
