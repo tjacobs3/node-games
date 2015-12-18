@@ -1,18 +1,18 @@
-var socket = io();
+var GameClient = function() {
+  this.socket = io();
+  this.playerInfo = $("#player-info").data();
 
-socket.on('player joined', function(msg){
-  $('#players').append($('<div>').text(msg));
-});
+  this.socket.emit('join game', {gameSlug: this.gameSlug()});
 
+  this.socket.on('player joined', function(msg){
+    $('#players').append($('<div>').text(msg));
+  });
+};
 
-function playerId() {
-  return $("#player-info").data("playerid");
-}
+GameClient.prototype.playerId = function() {
+  return this.playerInfo.playerid;
+};
 
-function gameSlug() {
-  return $("#player-info").data("gameslug");
-}
-
-$(function() {
-  socket.emit('join game', {gameSlug: gameSlug()});
-});
+GameClient.prototype.gameSlug = function() {
+  return this.playerInfo.gameslug;
+};
