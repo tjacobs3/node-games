@@ -56,6 +56,13 @@ app.post('/games', function(req, res, next) {
 
 app.post('/games/join', function(req, res) {
   var game = findGameBySlug(req.body.slug);
+
+  if(!game) {
+    res.locals.warning = "Could not find game!";
+    res.render('index.jade');
+    return;
+  }
+
   var player = joinGame(game, req.body.name, req);
 
   if(player == null) {
@@ -125,7 +132,7 @@ function findGameTypeByIdentifier(identifier) {
 }
 
 function findGameBySlug(slug) {
-  var game = _.find(games, function(game){ return game.slug == slug; });
+  var game = _.find(games, function(game){ return game.slug.toUpperCase() == slug.toUpperCase(); });
   return game;
 };
 

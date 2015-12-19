@@ -96,6 +96,9 @@ IrishPoker.prototype.setupTurn = function() {
       case 2:
         this.outside_inside_round();
         break;
+      case 3:
+        this.suit();
+        break;
     }
   }
 };
@@ -136,6 +139,21 @@ IrishPoker.prototype.outside_inside_round = function() {
   var that = this;
   $outsideButton.click(function() { that.playerAction("outside"); });
   $insideButton.click(function() { that.playerAction("inside"); });
+}
+
+IrishPoker.prototype.suit = function() {
+  $spade = $(IrishPoker.button({text: "♠ Spade"}));
+  $heart = $(IrishPoker.button({text: "♥ Heart"}));
+  $diamond = $(IrishPoker.button({text: "♦ Diamond"}));
+  $club = $(IrishPoker.button({text: "♣ Club"}));
+
+  $("#actions").append($spade).append($heart).append($diamond).append($club);
+
+  var that = this;
+  $spade.click(function() { that.playerAction("spade"); });
+  $heart.click(function() { that.playerAction("heart"); });
+  $diamond.click(function() { that.playerAction("diamond"); });
+  $club.click(function() { that.playerAction("club"); });
 }
 
 IrishPoker.button = _.template("<div class='button font--large'><%- text %></div>");

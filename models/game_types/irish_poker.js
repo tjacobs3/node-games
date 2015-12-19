@@ -90,6 +90,9 @@ IrishPoker.prototype.handlePlayerAction = function(playerId, action) {
     case 2:
       this.handleInsideOutside(action);
       break;
+    case 3:
+      this.handleSuit(action);
+      break;
   }
 
   this.currentPlayer().cards[this.currentRound].faceDown = false;
@@ -145,6 +148,32 @@ IrishPoker.prototype.handleInsideOutside = function(action) {
       this.sendMessage(this.currentPlayer().name + " guessed OUTSIDE and was CORRECT");
     else
       this.sendMessage(this.currentPlayer().name + " guessed OUTSIDE and was WRONG");
+  }
+}
+
+IrishPoker.prototype.handleSuit = function(action) {
+  var card = this.currentPlayer().cards[this.currentRound];
+
+  if(action == "spade") {
+    if (card.suit == "spade")
+      this.sendMessage(this.currentPlayer().name + " guessed SPADE and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed SPADE and was WRONG");
+  } else if(action == "heart") {
+    if (card.suit == "heart")
+      this.sendMessage(this.currentPlayer().name + " guessed HEART and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed HEART and was WRONG");
+  } else if(action == "diamond") {
+    if (card.suit == "diamond")
+      this.sendMessage(this.currentPlayer().name + " guessed DIAMOND and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed DIAMOND and was WRONG");
+  } else if(action == "club") {
+    if (card.suit == "club")
+      this.sendMessage(this.currentPlayer().name + " guessed CLUB and was CORRECT");
+    else
+      this.sendMessage(this.currentPlayer().name + " guessed CLUB and was WRONG");
   }
 }
 
