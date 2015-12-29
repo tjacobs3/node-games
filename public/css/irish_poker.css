@@ -33,3 +33,28 @@
 .background--red {
   background-color: red;
 }
+
+.highlighted {
+  background-color: rgb(176, 228, 185);
+  border: 1px solid black;
+}
+
+.row {
+  width: 900px;
+  margin: 1em auto;
+}
+
+.sub-header {
+  font-size: 1.5em;
+  font-family: sans-serif;
+  text-align: left;
+  margin: 1em 0 0 3.5em;
+}
+
+.hand {
+  margin: 1em;
+}
+
+.hand .card {
+  margin: 0 1em;
+}

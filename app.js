@@ -47,11 +47,16 @@ app.post('/games', function(req, res, next) {
   var gameType = findGameTypeByIdentifier(req.body.game_identifier)
   g = new gameType(io);
   games.push(g);
-  var player = joinGame(g, req.body.name, req);
 
   res.locals.game = g;
-  res.locals.player = player;
-  res.render('games/' + g.gameIdentifier + '.jade');
+
+  if(!!req.body.name) {
+    var player = joinGame(g, req.body.name, req);
+    res.locals.player = player;
+    res.render('games/' + g.gameIdentifier + '.jade');
+  } else {
+    res.render('games/' + g.gameIdentifier + '_viewer.jade');
+  }
 });
 
 app.post('/games/join', function(req, res) {
@@ -66,9 +71,14 @@ app.post('/games/join', function(req, res) {
   var player = joinGame(game, req.body.name, req);
 
   if(player == null) {
-    res.locals.warning = "Game is full!";
-    res.render('index.jade');
-  } else{
+    if(!!name) {
+      res.locals.warning = "Game is full!";
+      res.render('index.jade');
+    } else {
+      res.locals.game = game;
+      res.render('games/' + game.gameIdentifier + '_viewer.jade');
+    }
+  } else {
     res.locals.game = game;
     res.locals.player = player;
     res.render('games/' + game.gameIdentifier + '.jade');
@@ -89,7 +99,7 @@ function joinGame(game, name, request) {
     player = game.findPlayer(sess[game.slug]);
 
   // Try to join game by supplied name
-  if(!player)
+  if(!player && !!name)
     player = game.join(name);
 
   // Save the player if available
@@ -103,8 +113,6 @@ function joinGame(game, name, request) {
 // SOCKET STUFF
 //***************
 io.on('connection', function(socket) {
-  console.log('Client connected...');
-
   socket.on('join game', function(msg) {
     socket.join(msg.gameSlug);
   });

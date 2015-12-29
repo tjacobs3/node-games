@@ -45,11 +45,13 @@ IrishPoker.prototype.displayCards = function() {
   $("#my-cards .card").each(function( index ) {
     var card = player.cards[index];
 
-    if(!card.faceDown)
+    if(!card.faceDown) {
       $(this).addClass("revealed");
-
-    $(this).addClass(card.suit);
-    $(this).text(card.string);
+      $(this).text(card.string);
+      $(this).addClass(card.suit);
+    } else {
+      $(this).html("&nbsp;");
+    }
   });
 };
 

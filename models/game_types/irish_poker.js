@@ -190,6 +190,8 @@ IrishPoker.prototype.numberOutside = function(x, y, z) {
 //***************
 
 IrishPoker.prototype.serialize = function() {
+  var currentPlayer = this.currentPlayer();
+
   var players = _.map(this.players, function(player) {
     return {
       id: player.id,
@@ -205,7 +207,7 @@ IrishPoker.prototype.serialize = function() {
 
   return {
     status: this.status(),
-    currentTurn: this.currentPlayer().id,
+    currentTurn: !!currentPlayer ? this.currentPlayer().id : null,
     currentRound: this.currentRound,
     players: players
   }

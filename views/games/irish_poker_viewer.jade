@@ -1,0 +1,19 @@
+link(rel='stylesheet', href='/css/irish_poker.css')
+
+#game-info(data-gameSlug=game.slug, data-status=game.serialize())
+
+.game-header
+  h1 Irish Poker
+  h2 #{game.slug}
+
+  div#players
+    each player in game.players
+      div= player.name
+
+  div#status
+
+
+  #player-cards
+
+script(src="/scripts/game_viewer.js")
+script(src="/scripts/games/irish_poker_viewer.js")
