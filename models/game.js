@@ -5,6 +5,9 @@ var Game = function(io) {
   this.io = io;
   this.slug = Game.newSlug();
   this.players = [];
+  this.allowsViewer = true;
+  this.createdAt = new Date();
+  this.timeToLive = 10; // 10 minutes
 };
 
 Game.newSlug = function () {
@@ -31,5 +34,11 @@ Game.prototype.findPlayer = function(id) {
 Game.prototype.action = function(opts) {
 
 };
+
+Game.prototype.expired = function() {
+  var expectedDate = new Date(this.createdAt.getTime() + this.timeToLive * 60000);
+  return (new Date()) > expectedDate;
+};
+
 
 module.exports = Game

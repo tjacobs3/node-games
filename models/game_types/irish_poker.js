@@ -13,6 +13,7 @@ var IrishPoker = function(io) {
 }
 
 IrishPoker.gameIdentifier = "irish_poker";
+IrishPoker.allowsViewer = true;
 IrishPoker.STATUSES = {
   waiting_for_game_start: "waiting_for_game_start",
   game_started: "game_started"

@@ -13,6 +13,7 @@ var TicTacToe = function(io) {
 }
 
 TicTacToe.gameIdentifier = "tictactoe";
+TicTacToe.allowsViewer = false;
 
 TicTacToe.prototype = Object.create(Game.prototype);
 TicTacToe.prototype.constructor = TicTacToe;

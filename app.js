@@ -44,18 +44,24 @@ app.get('/', function(req, res, next) {
 });
 
 app.post('/games', function(req, res, next) {
-  var gameType = findGameTypeByIdentifier(req.body.game_identifier)
-  g = new gameType(io);
-  games.push(g);
+  var gameType = findGameTypeByIdentifier(req.body.game_identifier);
 
-  res.locals.game = g;
-
-  if(!!req.body.name) {
-    var player = joinGame(g, req.body.name, req);
-    res.locals.player = player;
-    res.render('games/' + g.gameIdentifier + '.jade');
+  if(!(req.body.name || gameType.allowsViewer)) {
+    res.locals.warning = "You must enter a name!";
+    res.render('index.jade');
   } else {
-    res.render('games/' + g.gameIdentifier + '_viewer.jade');
+    g = new gameType(io);
+    games.push(g);
+
+    res.locals.game = g;
+
+    if(!!req.body.name) {
+      var player = joinGame(g, req.body.name, req);
+      res.locals.player = player;
+      res.render('games/' + g.gameIdentifier + '.jade');
+    } else {
+      res.render('games/' + g.gameIdentifier + '_viewer.jade');
+    }
   }
 });
 
@@ -68,15 +74,21 @@ app.post('/games/join', function(req, res) {
     return;
   }
 
-  var player = joinGame(game, req.body.name, req);
+  var name = req.body.name;
+  var player = joinGame(game, name, req);
 
   if(player == null) {
     if(!!name) {
       res.locals.warning = "Game is full!";
       res.render('index.jade');
     } else {
-      res.locals.game = game;
-      res.render('games/' + game.gameIdentifier + '_viewer.jade');
+      if(game.constructor.allowsViewer) {
+        res.locals.game = game;
+        res.render('games/' + game.gameIdentifier + '_viewer.jade');
+      } else {
+        res.locals.warning = "You must enter a name!";
+        res.render('index.jade');
+      }
     }
   } else {
     res.locals.game = game;
