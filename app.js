@@ -40,6 +40,9 @@ app.use(layout());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+// Port options
+app.set('port', (process.env.PORT || 3000));
+
 //***************
 // ROUTERS
 //***************
@@ -178,5 +181,5 @@ function removeExpiredGames() {
 //***************
 // SERVER START
 //***************
-server.listen(3000);
+server.listen(app.get('port'));
 setInterval(removeExpiredGames, 600000); // 10 minutes
