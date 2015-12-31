@@ -28,7 +28,12 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 app.use(express.static('public'));
-app.use(session({ secret: 'sdfasdfsd3nksdf', cookie: { maxAge: 60000 }}))
+app.use(session({
+  secret: 'sdfasdfsd3nksdf',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}))
 
 // Views Options
 app.use(layout());
@@ -51,7 +56,7 @@ app.post('/games', function(req, res, next) {
     res.render('index.jade');
   } else {
     g = new gameType(io);
-    games.push(g);
+    addGame(g);
 
     res.locals.game = g;
 
@@ -142,7 +147,7 @@ io.on('connection', function(socket) {
 //***************
 // GAME STORE
 //***************
-var games = []
+var games = {}
 var gameTypes = [IrishPoker, TicTacToe]
 
 // Helpers
@@ -152,8 +157,21 @@ function findGameTypeByIdentifier(identifier) {
 }
 
 function findGameBySlug(slug) {
-  var game = _.find(games, function(game){ return game.slug.toUpperCase() == slug.toUpperCase(); });
-  return game;
+  return games[slug.toUpperCase()];
+};
+
+function addGame(game) {
+  games[game.slug.toUpperCase()] = game;
+}
+
+function removeGame(game) {
+  delete games[game.slug.toUpperCase()];
+}
+
+function removeExpiredGames() {
+  _.each(_.values(games), function(game) {
+    if(game.expired()) removeGame(game);
+  });
 };
 
 
@@ -161,3 +179,4 @@ function findGameBySlug(slug) {
 // SERVER START
 //***************
 server.listen(3000);
+setInterval(removeExpiredGames, 600000); // 10 minutes
