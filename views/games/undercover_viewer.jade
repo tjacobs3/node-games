@@ -1,0 +1,17 @@
+link(rel='stylesheet', href='/css/undercover.css')
+
+#game-info(data-gameSlug=game.slug, data-status=game.serialize())
+
+.game-header
+  h1 Undercover
+  h2 #{game.slug}
+
+  div#players
+    each player in game.players
+      div= player.name
+
+  div#status
+
+
+script(src="/scripts/game_viewer.js")
+script(src="/scripts/games/undercover_viewer.js")

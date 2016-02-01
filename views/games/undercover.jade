@@ -1,0 +1,24 @@
+link(rel='stylesheet', href='/css/undercover.css')
+
+#player-info(data-playerId=player.id, data-gameSlug=game.slug, data-status=game.serialize())
+
+.game-header
+  h1 Undercover
+  h2 #{game.slug}
+
+  div#players
+    each player in game.players
+      div= player.name
+
+  div#status
+
+  if !game.gameStarted
+    div#start-button.button.font--large.disabled
+      | WAITING FOR PLAYERS
+
+  #actions
+
+  #messages
+
+script(src="/scripts/game_client.js")
+script(src="/scripts/games/undercover.js")

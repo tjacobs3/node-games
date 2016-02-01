@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 // OUR MODELS
 var TicTacToe = require(__dirname + '/models/game_types/tic_tac_toe.js');
 var IrishPoker = require(__dirname + '/models/game_types/irish_poker.js');
+var Undercover = require(__dirname + '/models/game_types/undercover.js');
 
 //***************
 // EXPRESS SETUP
@@ -151,7 +152,7 @@ io.on('connection', function(socket) {
 // GAME STORE
 //***************
 var games = {}
-var gameTypes = [IrishPoker, TicTacToe]
+var gameTypes = [IrishPoker, TicTacToe, Undercover]
 
 // Helpers
 function findGameTypeByIdentifier(identifier) {
