@@ -23,6 +23,10 @@ link(rel='stylesheet', href='/css/tictactoe.css')
             = game.getLocation(i, j)
           - i++
       - j++
-        
-script(src="/scripts/game_client.js")
-script(src="/scripts/games/tictactoe.js")
+
+script(src="/js/tictactoe.js")
+
+script(type='text/javascript').
+  $(function() {
+    new TicTacToe();
+  });

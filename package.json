@@ -4,12 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.1",
+    "browserify-middleware": "^7.0.0",
     "cards": "^0.1.1",
     "express": "^4.13.3",
     "express-layout": "^0.1.0",
@@ -17,5 +18,10 @@
     "jade": "^1.11.0",
     "socket.io": "^1.3.7",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "nodemon": "^1.8.1",
+    "watchify": "^3.7.0"
   }
 }

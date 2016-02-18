@@ -9,6 +9,7 @@ var http = require('http');
 var socket_io = require('socket.io');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var browserify = require('browserify-middleware');
 
 // OUR MODELS
 var TicTacToe = require(__dirname + '/models/game_types/tic_tac_toe.js');
@@ -28,7 +29,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 app.use(session({
   secret: 'sdfasdfsd3nksdf',
   resave: true,
@@ -106,6 +107,10 @@ app.post('/games/join', function(req, res) {
   }
 });
 
+//***************
+// Browserified Games
+//***************
+app.get('/js/tictactoe.js', browserify('./client/tictactoe/client.js'));
 
 //***************
 // HELPERS

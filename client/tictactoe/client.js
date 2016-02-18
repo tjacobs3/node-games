@@ -1,3 +1,5 @@
+var GameClient = require('../game_client.js');
+
 var TicTacToe = function() {
   GameClient.call(this);
 
@@ -26,6 +28,7 @@ TicTacToe.prototype.cellClicked = function(event) {
   });
 }
 
-$(function() {
-  new TicTacToe();
-});
+////////////
+// Export
+////////////
+window.TicTacToe = TicTacToe;
