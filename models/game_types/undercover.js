@@ -14,14 +14,15 @@ var Undercover = function(io) {
   this.leader = 0;
 
   this.missionTeamSize = [
-    {5:2, 6:2, 7:2, 8:3, 9:3, 10:3}, // Round 1
-    {5:3, 6:3, 7:3, 8:4, 9:4, 10:4}, // Round 2
-    {5:2, 6:4, 7:3, 8:4, 9:4, 10:4}, // Round 3
-    {5:3, 6:3, 7:4, 8:5, 9:5, 10:5}, // Round 4
-    {5:3, 6:4, 7:4, 8:5, 9:5, 10:5} // Round 5
+    {2:2, 5:2, 6:2, 7:2, 8:3, 9:3, 10:3}, // Round 1
+    {2:2, 5:3, 6:3, 7:3, 8:4, 9:4, 10:4}, // Round 2
+    {2:2, 5:2, 6:4, 7:3, 8:4, 9:4, 10:4}, // Round 3
+    {2:2, 5:3, 6:3, 7:4, 8:5, 9:5, 10:5}, // Round 4
+    {2:2, 5:3, 6:4, 7:4, 8:5, 9:5, 10:5} // Round 5
   ];
 
   this.teamSize = {
+    2: [1, 1],
     5: [3,2],
     6: [4,2],
     7: [4,3],
@@ -46,7 +47,6 @@ Undercover.gamePhases = [
 
 Undercover.prototype = Object.create(Game.prototype);
 Undercover.prototype.constructor = Undercover;
-
 
 Undercover.prototype.join = function(name){
   if(this.players.length >= this.maxPlayers || this.isGameStarted())
@@ -105,6 +105,14 @@ Undercover.prototype.currentRound = function() {
   return this.mafia.wins + this.fbi.wins;
 };
 
+Undercover.prototype.teamForPlayer = function(player) {
+  if(_.contains(this.mafia.players, player)) {
+    return "mafia";
+  } else {
+    return "fbi";
+  }
+};
+
 //***************
 // GAME STATES
 //***************
@@ -135,10 +143,13 @@ Undercover.prototype.checkMissionVotes = function() {
 //***************
 
 Undercover.prototype.serialize = function() {
+  var that = this;
+
   var players = _.map(this.players, function(player) {
     return {
       id: player.id,
-      name: player.name
+      name: player.name,
+      team: that.teamForPlayer(player)
     }
   });
 
@@ -156,6 +167,7 @@ Undercover.prototype.action = function(opts) {
   switch(opts.action) {
     case "start game":
       this.startGame();
+      this.sendStatus();
       break;
     default:
       // Do nothing

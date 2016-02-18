@@ -12,16 +12,32 @@ Undercover.prototype = Object.create(GameClient.prototype);
 Undercover.prototype.constructor = Undercover;
 
 Undercover.prototype.setGameState = function(status) {
+  var previousStatus = this.gameStatus;
   this.gameStatus = status.status;
+  this.players = status.players;
 
   if(this.gameStatus === 'waiting_for_start') {
     this.enableStartButton();
+  } else if(this.gameStatus === 'waitingForTeam') {
+    this.handleGameStarted();
+
+    if(previousStatus === 'waiting_for_start') {
+      this.showTeam();
+    }
   }
 }
 
 //***************
 // UI FOR ROUNDS
 //***************
+
+Undercover.prototype.handleGameStarted = function() {
+  $("#start-button").remove();
+};
+
+Undercover.prototype.showTeam = function() {
+  $("#team").text("You are on team " + this.localPlayer().team);
+};
 
 Undercover.prototype.enableStartButton = function() {
   $("#start-button").text("START GAME");

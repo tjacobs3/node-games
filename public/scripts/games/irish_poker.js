@@ -63,10 +63,6 @@ IrishPoker.prototype.handleGameStarted = function() {
   $("#start-button").remove();
 };
 
-IrishPoker.prototype.findPlayer = function(id) {
-  return _.find(this.players, function(player){ return player.id == id; });
-};
-
 IrishPoker.prototype.startButtonClicked = function() {
   this.socket.emit('perform action', {
     action: "start game",
