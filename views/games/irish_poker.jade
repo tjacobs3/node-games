@@ -26,5 +26,9 @@ link(rel='stylesheet', href='/css/irish_poker.css')
 
   #messages
 
-script(src="/scripts/game_client.js")
-script(src="/scripts/games/irish_poker.js")
+  script(src="/js/irish_poker.js")
+
+  script(type='text/javascript').
+    $(function() {
+      new IrishPoker();
+    });

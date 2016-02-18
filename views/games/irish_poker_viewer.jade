@@ -15,5 +15,9 @@ link(rel='stylesheet', href='/css/irish_poker.css')
 
   #player-cards
 
-script(src="/scripts/game_viewer.js")
-script(src="/scripts/games/irish_poker_viewer.js")
+  script(src="/js/irish_poker_viewer.js")
+
+  script(type='text/javascript').
+    $(function() {
+      new IrishPokerViewer();
+    });

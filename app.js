@@ -111,6 +111,8 @@ app.post('/games/join', function(req, res) {
 // Browserified Games
 //***************
 app.get('/js/tictactoe.js', browserify('./client/tictactoe/client.js'));
+app.get('/js/irish_poker.js', browserify('./client/irish_poker/client.js'));
+app.get('/js/irish_poker_viewer.js', browserify('./client/irish_poker/viewer.js'));
 
 //***************
 // HELPERS

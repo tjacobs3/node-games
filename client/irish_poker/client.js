@@ -1,3 +1,5 @@
+var GameClient = require('../game_client.js');
+
 var IrishPoker = function() {
   GameClient.call(this);
 
@@ -157,7 +159,7 @@ IrishPoker.prototype.suit = function() {
 IrishPoker.button = _.template("<div class='button font--large'><%- text %></div>");
 IrishPoker.messageRow = _.template("<div><%- text %></div>");
 
-
-$(function() {
-  new IrishPoker();
-});
+////////////
+// Export
+////////////
+window.IrishPoker = IrishPoker;

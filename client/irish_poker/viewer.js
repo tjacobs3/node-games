@@ -1,3 +1,5 @@
+var GameViewer = require('../game_viewer.js');
+
 var IrishPokerViewer = function() {
   GameViewer.call(this);
 
@@ -80,7 +82,7 @@ IrishPokerViewer.prototype.handleGameStarted = function() {
 
 IrishPokerViewer.cardRow = _.template("<div class='row player' data-playerId='<%- id %>'><div class='sub-header'><%- name %></div><div class='hand'><div class='card' data-card=0 /><div class='card' data-card=1 /><div class='card' data-card=2 /><div class='card' data-card=3 /></div></div>");
 
-
-$(function() {
-  new IrishPokerViewer();
-});
+////////////
+// Export
+////////////
+window.IrishPokerViewer = IrishPokerViewer;
