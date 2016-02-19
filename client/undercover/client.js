@@ -1,3 +1,5 @@
+var GameClient = require('../game_client.js');
+
 var Undercover = function() {
   GameClient.call(this);
 
@@ -51,6 +53,7 @@ Undercover.prototype.startButtonClicked = function() {
   });
 }
 
-$(function() {
-  new Undercover();
-});
+////////////
+// Export
+////////////
+window.Undercover = Undercover;

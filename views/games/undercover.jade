@@ -22,5 +22,8 @@ link(rel='stylesheet', href='/css/undercover.css')
 
   #team
 
-script(src="/scripts/game_client.js")
-script(src="/scripts/games/undercover.js")
+script(src="/js/undercover.js")
+script(type='text/javascript').
+  $(function() {
+    new Undercover();
+  });
