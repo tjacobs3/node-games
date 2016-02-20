@@ -6,22 +6,51 @@ link(rel='stylesheet', href='/css/undercover.css')
   h1 Undercover
   h2 #{game.slug}
 
-  div#game-content
+div#game-content
 
-  #actions
+#actions
 
-  #messages
+#messages
 
-  #team
+#team
 
 script(id="waiting-players-template" type='text/x-handlebars-template').
   <div id="start-button" class="button font--large disabled">
     WAITING FOR PLAYERS
   </div>
-  <div id="players"></div>
+  <div id="players" class="player-list"></div>
+
+////////////////
+/// CHOOSE TEAM
+////////////////
+script(id="choosing-team-template" type="text/x-handlebars-template").
+  <div class="choose-team">
+    <h3>You are the leader</h3>
+    <h4>Choose your team</h4>
+      {{#each players}}
+      <div class="player-choice">{{name}}</div>
+      {{/each}}
+    </div>
+  </div>
+
+////////////////
+/// APPROVE TEAM
+////////////////
+script(id="approve-team-template" type="text/x-handlebars-template").
+  <div class="choose-team">
+    <h3>{{name}} is the leader</h3>
+    <h4>Please wait while they choose the team</h4>
+  </div>
+
+script(id="player-list-template" type="text/x-handlebars-template").
+  <div id="player-list" class="scroll-up player-list fixed-bottom">
+    {{#each players}}
+    <div class="player-tag">{{name}}</div>
+    {{/each}}
+  </div>
 
 script(id="player-info-block-template" type='text/x-handlebars-template').
-  <div class="fade-in player">{{name}}</div>
+  <div class="fade-in player-tag">{{name}}</div>
 
 script(id="modal-template" type='text/x-handlebars-template').
   <div class="modal fade">

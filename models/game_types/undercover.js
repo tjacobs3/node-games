@@ -155,6 +155,7 @@ Undercover.prototype.serialize = function() {
 
   return {
     status: this.phase,
+    leaderId: this.players[this.leader].id,
     players: players
   }
 }

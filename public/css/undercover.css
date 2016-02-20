@@ -2,13 +2,13 @@
   background-color: gray;
 }
 
-#players {
+.player-list {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-#players .player {
+.player-tag {
   font-size: 2em;
   font-family: monospace;
   border: 1px solid black;
@@ -17,6 +17,23 @@
   margin: 0 0.5em;
 }
 
+.choose-team {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  padding: 1em;
+  border-top: 2px solid black;
+}
+
+/******************
+FADE IN
+******************/
 .fade-in {
   animation: fadein 0.5s;
 }
@@ -29,5 +46,21 @@
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/******************
+SCROLL UP
+******************/
+.scroll-up {
+  animation: scrollup 0.5s;
+}
+
+@keyframes scrollup {
+  from {
+    transform: translateY(500px);
+  }
+  to {
+    transform: translateY(0px);
   }
 }
