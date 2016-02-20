@@ -6,21 +6,43 @@ link(rel='stylesheet', href='/css/undercover.css')
   h1 Undercover
   h2 #{game.slug}
 
-  div#players
-    each player in game.players
-      div= player.name
-
-  div#status
-
-  if !game.gameStarted
-    div#start-button.button.font--large.disabled
-      | WAITING FOR PLAYERS
+  div#game-content
 
   #actions
 
   #messages
 
   #team
+
+script(id="waiting-players-template" type='text/x-handlebars-template').
+  <div id="start-button" class="button font--large disabled">
+    WAITING FOR PLAYERS
+  </div>
+  <div id="players"></div>
+
+script(id="player-info-block-template" type='text/x-handlebars-template').
+  <div class="fade-in player">{{name}}</div>
+
+script(id="modal-template" type='text/x-handlebars-template').
+  <div class="modal fade">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{{title}}</h4>
+        </div>
+        <div class="modal-body">
+          <p>{{body}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Got It</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 script(src="/js/undercover.js")
 script(type='text/javascript').

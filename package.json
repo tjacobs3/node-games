@@ -15,6 +15,7 @@
     "express": "^4.13.3",
     "express-layout": "^0.1.0",
     "express-session": "^1.12.1",
+    "handlebars": "^4.0.5",
     "jade": "^1.11.0",
     "socket.io": "^1.3.7",
     "underscore": "^1.8.3"
