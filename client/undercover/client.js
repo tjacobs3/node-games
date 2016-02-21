@@ -87,7 +87,7 @@ Undercover.prototype.showPlayerList = function() {
   var source   = $("#player-list-template").html();
   var template = Handlebars.compile(source);
 
-  $("body").append($(template({players: this.players})));
+  $("body").prepend($(template({players: this.players})));
 }
 
 Undercover.prototype.startButtonClicked = function() {

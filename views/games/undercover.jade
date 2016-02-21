@@ -1,80 +1,91 @@
 link(rel='stylesheet', href='/css/undercover.css')
 
-#player-info(data-playerId=player.id, data-gameSlug=game.slug, data-status=game.serialize())
+.undercover
+  #player-info(data-playerId=player.id, data-gameSlug=game.slug, data-status=game.serialize())
+  .game-header
+    h1.game-header--title Undercover
+    h2.game-header--description game code: #{game.slug}
 
-.game-header
-  h1 Undercover
-  h2 #{game.slug}
+  div#game-content
 
-div#game-content
+  #actions
 
-#actions
+  #messages
 
-#messages
+  #team
 
-#team
-
-script(id="waiting-players-template" type='text/x-handlebars-template').
-  <div id="start-button" class="button font--large disabled">
-    WAITING FOR PLAYERS
-  </div>
-  <div id="players" class="player-list"></div>
-
-////////////////
-/// CHOOSE TEAM
-////////////////
-script(id="choosing-team-template" type="text/x-handlebars-template").
-  <div class="choose-team">
-    <h3>You are the leader</h3>
-    <h4>Choose your team</h4>
-      {{#each players}}
-      <div class="player-choice">{{name}}</div>
-      {{/each}}
+  script(id="waiting-players-template" type='text/x-handlebars-template').
+    <div class="players-wrapper col-md-2">
+      <div class="players--title"> <div>Players</div> </div>
+      <div id="players" class="player-list"></div>
     </div>
-  </div>
+    <div class="start-container col-md-10">
+      <div id="start-button" class="button font--large disabled">
+        WAITING FOR PLAYERS
+      </div>
+    </div>
 
-////////////////
-/// APPROVE TEAM
-////////////////
-script(id="approve-team-template" type="text/x-handlebars-template").
-  <div class="choose-team">
-    <h3>{{name}} is the leader</h3>
-    <h4>Please wait while they choose the team</h4>
-  </div>
 
-script(id="player-list-template" type="text/x-handlebars-template").
-  <div id="player-list" class="scroll-up player-list fixed-bottom">
-    {{#each players}}
-    <div class="player-tag">{{name}}</div>
-    {{/each}}
-  </div>
+  ////////////////
+  /// CHOOSE TEAM
+  ////////////////
+  script(id="choosing-team-template" type="text/x-handlebars-template").
+    <div class="choose-team col-md-8">
+      <h3>You are the leader</h3>
+      <h4>Choose your team</h4>
+        {{#each players}}
+        <div class="player-choice">{{name}}</div>
+        {{/each}}
+      </div>
+    </div>
 
-script(id="player-info-block-template" type='text/x-handlebars-template').
-  <div class="fade-in player-tag">{{name}}</div>
+  ////////////////
+  /// APPROVE TEAM
+  ////////////////
+  script(id="player-list-template" type="text/x-handlebars-template").
 
-script(id="modal-template" type='text/x-handlebars-template').
-  <div class="modal fade">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title">{{title}}</h4>
-        </div>
-        <div class="modal-body">
-          <p>{{body}}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Got It</button>
+   <div class="players-wrapper col-md-2">
+      <div class="players--title"> <div>Players</div> </div>
+      <div id="player-list" class="player-list">
+           {{#each players}}
+            <div class="player-tag">{{name}}</div>
+           {{/each}}
+      </div>
+    </div>
+
+  script(id="approve-team-template" type="text/x-handlebars-template").
+    <div class="choose-team col-md-8">
+      <h3>{{name}} is the leader</h3>
+      <h4>Please wait while they choose the team</h4>
+    </div>
+
+
+  script(id="player-info-block-template" type='text/x-handlebars-template').
+    <div class="fade-in player-tag">{{name}}</div>
+
+  script(id="modal-template" type='text/x-handlebars-template').
+    <div class="modal fade">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{{title}}</h4>
+          </div>
+          <div class="modal-body">
+            <p>{{body}}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Got It</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
 
-script(src="/js/undercover.js")
-script(type='text/javascript').
-  $(function() {
-    new Undercover();
-  });
+  script(src="/js/undercover.js")
+  script(type='text/javascript').
+    $(function() {
+      new Undercover();
+    });

@@ -1,15 +1,69 @@
+/* 
+ *  Layout 
+ *
+ */
+
+.undercover{
+  font-family:'Open Sans';
+}
+.game-header{
+  height: 12em;
+  padding: 1.5em 1.5em 1.5em 1.5em;
+}
+
+
+.game-header {
+    background: linear-gradient(120deg,rgb(62, 49, 60),rgb(62,59,25));
+    background-size:cover;
+  
+  }
+.game-header--title{
+    color: #FFFFFF;
+    font-size: 60px;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 0;
+}
+.game-header--description {
+    font-size: 25px;
+    color: #FFFFFF;
+   
+}
+.game-header--fill{width:100%;height:350px;background-position:center;background-size:cover;
+}
+
+.players-wrapper{
+  background: linear-gradient(-160deg, rgb(62,49,60),rgb(60,59,25));
+  height: 100%;
+  color: #eee
+}
+.players--title{
+  display: flex;
+  justify-content: center;
+  font-size: 2em;
+  padding: 0.2em 1em;
+  margin: 0 0.5em;
+}
+
+.start-container .button {
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* TJ's stuff
+ *
+ */
 .button.disabled {
   background-color: gray;
 }
 
 .player-list {
-  width: 100%;
   display: flex;
   justify-content: center;
 }
 
 .player-tag {
-  font-size: 2em;
+  font-size: 1.5em;
   font-family: monospace;
   border: 1px solid black;
   border-radius: 4px;
