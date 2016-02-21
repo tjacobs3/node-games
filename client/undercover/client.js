@@ -28,9 +28,6 @@ Undercover.prototype.setGameState = function(status) {
       this.currentState = new WaitingForPlayers(this.players);
     }
 
-    if(this.gameStatus !== 'waiting_for_players' && this.gameStatus !== 'waiting_for_start')
-      this.showPlayerList();
-
     if(this.gameStatus === 'waiting_for_start') {
       this.currentState.enableStartButton(this.startButtonClicked.bind(this));
     } else if(this.gameStatus === 'waitingForTeam') {
@@ -80,15 +77,6 @@ Undercover.prototype.teamChooseState = function() {
 Undercover.prototype.showTeam = function() {
   this.showModal("The game is about to start", "You are on team " + this.localPlayer().team);
 };
-
-Undercover.prototype.showPlayerList = function() {
-  if($("#player-list").length) return;
-
-  var source   = $("#player-list-template").html();
-  var template = Handlebars.compile(source);
-
-  $("body").prepend($(template({players: this.players})));
-}
 
 Undercover.prototype.startButtonClicked = function() {
   this.socket.emit('perform action', {

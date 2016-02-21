@@ -6,19 +6,16 @@ link(rel='stylesheet', href='/css/undercover.css')
     h1.game-header--title Undercover
     h2.game-header--description game code: #{game.slug}
 
-  div#game-content
-
+  div#players-wrapper.col-md-2
+    .players--title
+      div Players
+    div#player-list.player-list
+  div#game-content.col-md-8
   #actions
-
   #messages
-
   #team
 
   script(id="waiting-players-template" type='text/x-handlebars-template').
-    <div class="players-wrapper col-md-2">
-      <div class="players--title"> <div>Players</div> </div>
-      <div id="players" class="player-list"></div>
-    </div>
     <div class="start-container col-md-10">
       <div id="start-button" class="button font--large disabled">
         WAITING FOR PLAYERS
@@ -34,7 +31,7 @@ link(rel='stylesheet', href='/css/undercover.css')
       <h3>You are the leader</h3>
       <h4>Choose your team</h4>
         {{#each players}}
-        <div class="player-choice">{{name}}</div>
+        <div class="player-choicegames">{{name}}</div>
         {{/each}}
       </div>
     </div>
@@ -42,23 +39,12 @@ link(rel='stylesheet', href='/css/undercover.css')
   ////////////////
   /// APPROVE TEAM
   ////////////////
-  script(id="player-list-template" type="text/x-handlebars-template").
-
-   <div class="players-wrapper col-md-2">
-      <div class="players--title"> <div>Players</div> </div>
-      <div id="player-list" class="player-list">
-           {{#each players}}
-            <div class="player-tag">{{name}}</div>
-           {{/each}}
-      </div>
-    </div>
 
   script(id="approve-team-template" type="text/x-handlebars-template").
     <div class="choose-team col-md-8">
       <h3>{{name}} is the leader</h3>
       <h4>Please wait while they choose the team</h4>
     </div>
-
 
   script(id="player-info-block-template" type='text/x-handlebars-template').
     <div class="fade-in player-tag">{{name}}</div>

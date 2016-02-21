@@ -13,7 +13,7 @@ WaitingForPlayers.prototype.addPlayer = function(player) {
   var source   = $("#player-info-block-template").html();
   var template = Handlebars.compile(source);
 
-  $("#players").append(template(player));
+  $("#player-list").append(template(player));
 };
 
 WaitingForPlayers.prototype.enableStartButton = function(callback) {
