@@ -27,10 +27,10 @@ script(id="choosing-team-template" type="text/x-handlebars-template").
   <div class="choose-team">
     <h3>You are the leader</h3>
     <h4>Choose your team</h4>
-      {{#each players}}
-      <div class="player-choice">{{name}}</div>
-      {{/each}}
-    </div>
+    {{#each players}}
+      <button type="button" class="btn btn-default btn-lg btn-block player-choice" data-player-id="{{id}}">{{name}}</button>
+    {{/each}}
+    <button type="button" class="btn btn-primary choose-team-button" disabled="disabled">Choose {{teamSize}} more</button>
   </div>
 
 ////////////////
@@ -51,6 +51,14 @@ script(id="player-list-template" type="text/x-handlebars-template").
 
 script(id="player-info-block-template" type='text/x-handlebars-template').
   <div class="fade-in player-tag">{{name}}</div>
+
+script(id="team-vote-template" type='text/x-handlebars-template').
+  <h4>Do you approve of the team?</h4>
+  <button type="button" class="btn btn-primary">Yes</button>
+  <button type="button" class="btn btn-danger">No</button>
+
+script(id="team-vote-not-participating-template" type='text/x-handlebars-template').
+  <h4>Please wait for the players to vote</h4>
 
 script(id="modal-template" type='text/x-handlebars-template').
   <div class="modal fade">

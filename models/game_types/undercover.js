@@ -94,7 +94,6 @@ Undercover.prototype.missionPasses = function() {
   return _.all(this.electedPlayers, function(player) { return player.vote; } );
 };
 
-
 Undercover.prototype.incrementLeader = function() {
   this.leader = this.leader + 1;
   if(this.leader >= this.players.length)
@@ -103,6 +102,10 @@ Undercover.prototype.incrementLeader = function() {
 
 Undercover.prototype.currentRound = function() {
   return this.mafia.wins + this.fbi.wins;
+};
+
+Undercover.prototype.roundTeamSize = function(round) {
+  return this.missionTeamSize[round][this.players.length];
 };
 
 Undercover.prototype.teamForPlayer = function(player) {
@@ -138,6 +141,17 @@ Undercover.prototype.checkMissionVotes = function() {
   }
 };
 
+Undercover.prototype.setElectedTeam = function(ids) {
+  if(this.phase !== "waitingForTeam") return;
+
+  this.electedPlayers = _.select(this.players, function(player) {
+    return _.contains(ids, player.id);
+  });
+
+  this.phase = "teamVote";
+};
+
+
 //***************
 // SERIALIZER
 //***************
@@ -156,7 +170,8 @@ Undercover.prototype.serialize = function() {
   return {
     status: this.phase,
     leaderId: this.players[this.leader].id,
-    players: players
+    players: players,
+    teamSize: this.roundTeamSize(this.currentRound())
   }
 }
 
@@ -168,6 +183,10 @@ Undercover.prototype.action = function(opts) {
   switch(opts.action) {
     case "start game":
       this.startGame();
+      this.sendStatus();
+      break;
+    case "submit team":
+      this.setElectedTeam(opts.ids);
       this.sendStatus();
       break;
     default:

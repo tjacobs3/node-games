@@ -5,6 +5,7 @@ var Handlebars = require('handlebars');
 var WaitingForPlayers = require('./waiting_for_players.js');
 var ChoosingTeam = require('./choosing_team.js');
 var ApproveTeam = require('./approve_team.js');
+var TeamVote = require('./team_vote.js');
 
 var Undercover = function() {
   GameClient.call(this);
@@ -21,6 +22,7 @@ Undercover.prototype.setGameState = function(status) {
   var previousStatus = this.gameStatus;
   this.gameStatus = status.status;
   this.leaderId = status.leaderId;
+  this.teamSize = status.teamSize;
   this.players = status.players;
 
   if(previousStatus !== this.gameStatus) {
@@ -32,13 +34,15 @@ Undercover.prototype.setGameState = function(status) {
       this.showPlayerList();
 
     if(this.gameStatus === 'waiting_for_start') {
-      this.currentState.enableStartButton(this.startButtonClicked.bind(this));
+      this.currentState.enableStartButton(this.startGame.bind(this));
     } else if(this.gameStatus === 'waitingForTeam') {
       this.currentState = this.teamChooseState();
 
       if(previousStatus === 'waiting_for_start') {
         this.showTeam();
       }
+    } else if(this.gameStatus === 'teamVote') {
+      this.currentState = this.teamVoteState();
     }
   }
 }
@@ -69,9 +73,13 @@ Undercover.prototype.showModal = function(title, body) {
   modal.modal();
 };
 
+Undercover.prototype.teamVoteState = function() {
+  return new TeamVote(this.leaderId == this.playerId());
+};
+
 Undercover.prototype.teamChooseState = function() {
   if(this.leaderId == this.playerId()) {
-    return new ChoosingTeam(this.players);
+    return new ChoosingTeam(this.players, this.teamSize, this.submitTeam.bind(this));
   } else {
     return new ApproveTeam(this.findPlayer(this.leaderId));
   }
@@ -90,9 +98,20 @@ Undercover.prototype.showPlayerList = function() {
   $("body").append($(template({players: this.players})));
 }
 
-Undercover.prototype.startButtonClicked = function() {
+/////////////////
+// SOCKET ACTIONS
+/////////////////
+Undercover.prototype.startGame = function() {
   this.socket.emit('perform action', {
     action: "start game",
+    gameSlug: this.gameSlug()
+  });
+}
+
+Undercover.prototype.submitTeam = function(ids) {
+  this.socket.emit('perform action', {
+    action: "submit team",
+    ids: ids,
     gameSlug: this.gameSlug()
   });
 }
