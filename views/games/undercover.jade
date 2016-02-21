@@ -52,13 +52,22 @@ script(id="player-list-template" type="text/x-handlebars-template").
 script(id="player-info-block-template" type='text/x-handlebars-template').
   <div class="fade-in player-tag">{{name}}</div>
 
+////////////////
+/// TEAM VOTE
+////////////////
 script(id="team-vote-template" type='text/x-handlebars-template').
   <h4>Do you approve of the team?</h4>
-  <button type="button" class="btn btn-primary">Yes</button>
-  <button type="button" class="btn btn-danger">No</button>
+  <button type="button" class="btn btn-primary yes-button">Yes</button>
+  <button type="button" class="btn btn-danger no-button">No</button>
 
-script(id="team-vote-not-participating-template" type='text/x-handlebars-template').
-  <h4>Please wait for the players to vote</h4>
+script(id="voted-template" type='text/x-handlebars-template').
+  <h4>Waiting for all the votes</h4>
+
+////////////////
+/// MISSION VOTE
+////////////////
+script(id="mission-vote-template" type='text/x-handlebars-template').
+  <h4>Does the mission succeed?</h4>
 
 script(id="modal-template" type='text/x-handlebars-template').
   <div class="modal fade">

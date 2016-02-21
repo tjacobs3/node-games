@@ -1,12 +1,29 @@
 var Handlebars = require('handlebars');
 var _ = require('underscore');
 
-var TeamVote = function(isLeader) {
-  var template = isLeader ? "#team-vote-not-participating-template" : "#team-vote-template";
-  var source   = $(template).html();
+var TeamVote = function(voteFunc) {
+  var source   = $("#team-vote-template").html();
+  var template = Handlebars.compile(source);
+
+  $("#game-content").html(template());
+  var that = this;
+
+  $(".yes-button").click(function() {
+    voteFunc(true);
+    that.voted();
+  });
+
+  $(".no-button").click(function() {
+    voteFunc(false);
+    that.voted();
+  });
+};
+
+TeamVote.prototype.voted = function() {
+  var source   = $("#voted-template").html();
   var template = Handlebars.compile(source);
 
   $("#game-content").html(template());
 };
 
-module.exports = TeamVote
+module.exports = TeamVote;

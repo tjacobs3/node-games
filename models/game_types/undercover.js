@@ -121,16 +121,25 @@ Undercover.prototype.teamForPlayer = function(player) {
 //***************
 
 Undercover.prototype.checkTeamVotes = function() {
+  if(_.any(this.players, function(player) { return player.vote == null }))
+    return;
+
   var teamPasses = this.teamPasses();
 
   if(teamPasses == false) {
     this.incrementLeader();
+    this.phase = "waitingForTeam";
   } else if(teamPasses == true) {
     this.phase = "missionVotes";
   }
+
+  this.resetVotes();
 };
 
 Undercover.prototype.checkMissionVotes = function() {
+  if(_.any(this.electedPlayers, function(player) { return player.vote == null }))
+    return;
+
   var missionPasses = this.missionPasses();
 
   if(missionPasses == false) {
@@ -139,6 +148,8 @@ Undercover.prototype.checkMissionVotes = function() {
     this.mafia.wins++;
     this.phase = "waitingForTeam";
   }
+
+  this.resetVotes();
 };
 
 Undercover.prototype.setElectedTeam = function(ids) {
@@ -151,6 +162,14 @@ Undercover.prototype.setElectedTeam = function(ids) {
   this.phase = "teamVote";
 };
 
+Undercover.prototype.vote = function(playerVote, playerId) {
+  var player = this.findPlayer(playerId);
+  player.vote = playerVote;
+};
+
+Undercover.prototype.resetVotes = function() {
+  _.each(this.players, function(player) { player.vote = null; });
+};
 
 //***************
 // SERIALIZER
@@ -187,6 +206,12 @@ Undercover.prototype.action = function(opts) {
       break;
     case "submit team":
       this.setElectedTeam(opts.ids);
+      this.sendStatus();
+      break;
+    case "vote":
+      this.vote(opts.vote, opts.playerId);
+      if(this.phase == "teamVote") this.checkTeamVotes();
+      else this.checkMissionVotes();
       this.sendStatus();
       break;
     default:

@@ -6,6 +6,7 @@ var WaitingForPlayers = require('./waiting_for_players.js');
 var ChoosingTeam = require('./choosing_team.js');
 var ApproveTeam = require('./approve_team.js');
 var TeamVote = require('./team_vote.js');
+var MissionVote = require('./mission_vote.js');
 
 var Undercover = function() {
   GameClient.call(this);
@@ -43,6 +44,8 @@ Undercover.prototype.setGameState = function(status) {
       }
     } else if(this.gameStatus === 'teamVote') {
       this.currentState = this.teamVoteState();
+    } else if(this.gameStatus === 'missionVotes') {
+      this.currentState = new MissionVote();
     }
   }
 }
@@ -74,7 +77,7 @@ Undercover.prototype.showModal = function(title, body) {
 };
 
 Undercover.prototype.teamVoteState = function() {
-  return new TeamVote(this.leaderId == this.playerId());
+  return new TeamVote(this.submitVote.bind(this));
 };
 
 Undercover.prototype.teamChooseState = function() {
@@ -112,6 +115,15 @@ Undercover.prototype.submitTeam = function(ids) {
   this.socket.emit('perform action', {
     action: "submit team",
     ids: ids,
+    gameSlug: this.gameSlug()
+  });
+}
+
+Undercover.prototype.submitVote = function(vote) {
+  this.socket.emit('perform action', {
+    action: "vote",
+    playerId: this.playerId(),
+    vote: vote,
     gameSlug: this.gameSlug()
   });
 }
