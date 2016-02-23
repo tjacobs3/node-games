@@ -20,6 +20,7 @@ Undercover.prototype = Object.create(GameClient.prototype);
 Undercover.prototype.constructor = Undercover;
 
 Undercover.prototype.setGameState = function(status) {
+    console.log("SET STATE", status.status);
   var previousStatus = this.gameStatus;
   this.gameStatus = status.status;
   this.leaderId = status.leaderId;
@@ -45,7 +46,7 @@ Undercover.prototype.setGameState = function(status) {
     } else if(this.gameStatus === 'teamVote') {
       this.currentState = this.teamVoteState();
     } else if(this.gameStatus === 'missionVotes') {
-      this.currentState = new MissionVote();
+      this.currentState = this.missionVoteState();
     }
   }
 }
@@ -74,6 +75,13 @@ Undercover.prototype.showModal = function(title, body) {
   var modal = $(template({title: title, body: body}));
   $("body").append(modal);
   modal.modal();
+};
+
+Undercover.prototype.missionVoteState = function() {
+  this.currentState = new MissionVote(
+    this.localPlayer().onTeam,
+    this.submitVote.bind(this)
+  );
 };
 
 Undercover.prototype.teamVoteState = function() {

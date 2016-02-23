@@ -12,6 +12,7 @@ var Undercover = function(io) {
   this.minPlayers = 2;
   this.electedPlayers = [];
   this.leader = 0;
+  this.consecutiveTeamFails = 0;
 
   this.missionTeamSize = [
     {2:2, 5:2, 6:2, 7:2, 8:3, 9:3, 10:3}, // Round 1
@@ -36,6 +37,7 @@ var Undercover = function(io) {
 
 Undercover.gameIdentifier = "undercover";
 Undercover.allowsViewer = true;
+Undercover.maxConsecutiveTeamVoteFails = 3;
 Undercover.gamePhases = [
   "waiting_for_players",
   "waiting_for_start",
@@ -70,7 +72,7 @@ Undercover.prototype.startGame = function() {
   this.mafia.players = _.sample(this.players, mafiaSize);
   this.fbi.players = _.difference(this.players, this.mafia.players);
 
-  this.phase = "waitingForTeam";
+  this.startNewRound();
 };
 
 Undercover.prototype.clearPlayerVotes = function() {
@@ -116,6 +118,18 @@ Undercover.prototype.teamForPlayer = function(player) {
   }
 };
 
+Undercover.prototype.startNewRound = function(resetTeamFails) {
+  if(resetTeamFails === undefined)
+    resetTeamFails = true;
+
+  this.electedPlayers = [];
+  this.phase = "waitingForTeam";
+  this.resetVotes();
+
+  if(resetTeamFails)
+    this.consecutiveTeamFails = 0;
+};
+
 //***************
 // GAME STATES
 //***************
@@ -128,7 +142,10 @@ Undercover.prototype.checkTeamVotes = function() {
 
   if(teamPasses == false) {
     this.incrementLeader();
-    this.phase = "waitingForTeam";
+    this.startNewRound(false);
+    if(this.consecutiveTeamFails >= Undercover.maxConsecutiveTeamVoteFails) {
+      this.fbi.wins++;
+    }
   } else if(teamPasses == true) {
     this.phase = "missionVotes";
   }
@@ -146,10 +163,9 @@ Undercover.prototype.checkMissionVotes = function() {
     this.fbi.wins++;
   } else if(missionPasses == true) {
     this.mafia.wins++;
-    this.phase = "waitingForTeam";
   }
 
-  this.resetVotes();
+  this.startNewRound();
 };
 
 Undercover.prototype.setElectedTeam = function(ids) {
@@ -179,10 +195,16 @@ Undercover.prototype.serialize = function() {
   var that = this;
 
   var players = _.map(this.players, function(player) {
+    var onTeam = false;
+
+    if(that.phase === "missionVotes")
+      onTeam = _.any(that.electedPlayers, function(electedPlayer) { return player.id === electedPlayer.id});
+
     return {
       id: player.id,
       name: player.name,
-      team: that.teamForPlayer(player)
+      team: that.teamForPlayer(player),
+      onTeam: onTeam
     }
   });
 

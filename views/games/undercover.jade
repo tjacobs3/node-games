@@ -42,6 +42,9 @@ script(id="approve-team-template" type="text/x-handlebars-template").
     <h4>Please wait while they choose the team</h4>
   </div>
 
+////////////////
+/// PLAYER LIST
+////////////////
 script(id="player-list-template" type="text/x-handlebars-template").
   <div id="player-list" class="scroll-up player-list fixed-bottom">
     {{#each players}}
@@ -68,7 +71,12 @@ script(id="voted-template" type='text/x-handlebars-template').
 ////////////////
 script(id="mission-vote-template" type='text/x-handlebars-template').
   <h4>Does the mission succeed?</h4>
+  <button type="button" class="btn btn-primary yes-button">Yes</button>
+  <button type="button" class="btn btn-danger no-button">No</button>
 
+/////////////////
+/// GENERIC MODAL
+/////////////////
 script(id="modal-template" type='text/x-handlebars-template').
   <div class="modal fade">
     <div class="modal-dialog" role="document">
