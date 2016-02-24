@@ -2,11 +2,11 @@ var GameClient = require('../game_client.js');
 var Handlebars = require('handlebars');
 
 // Templates
-var WaitingForPlayers = require('./waiting_for_players.js');
-var ChoosingTeam = require('./choosing_team.js');
-var ApproveTeam = require('./approve_team.js');
-var TeamVote = require('./team_vote.js');
-var MissionVote = require('./mission_vote.js');
+var WaitingForPlayers = require('./client/waiting_for_players.js');
+var ChoosingTeam = require('./client/choosing_team.js');
+var ApproveTeam = require('./client/approve_team.js');
+var TeamVote = require('./client/team_vote.js');
+var MissionVote = require('./client/mission_vote.js');
 
 var Undercover = function() {
   GameClient.call(this);
@@ -20,7 +20,6 @@ Undercover.prototype = Object.create(GameClient.prototype);
 Undercover.prototype.constructor = Undercover;
 
 Undercover.prototype.setGameState = function(status) {
-    console.log("SET STATE", status.status);
   var previousStatus = this.gameStatus;
   this.gameStatus = status.status;
   this.leaderId = status.leaderId;

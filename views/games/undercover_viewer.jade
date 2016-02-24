@@ -1,16 +1,36 @@
 link(rel='stylesheet', href='/css/undercover.css')
 
-#game-info(data-gameSlug=game.slug, data-status=game.serialize())
+#game-info(data-gameSlug=game.slug, data-status=game.serialize(), data-minPlayers=5)
 
 .game-header
   h1 Undercover
   h2 #{game.slug}
 
-  div#players
-    each player in game.players
-      div= player.name
+div#game-content
 
-  div#status
+///////////////////////
+/// WAITING FOR PLAYERS
+///////////////////////
+script(id="waiting-players-template" type='text/x-handlebars-template').
+  <h1>Waiting For Players <small class="waitingForPlayersSubHeadline">Looking for at least <span class="playerCount">5</span> more players</small></h1>
+  <div id="players" class="player-list"></div>
 
-script(src="/scripts/game_viewer.js")
-script(src="/scripts/games/undercover_viewer.js")
+////////////////
+/// PLAYER LIST
+////////////////
+script(id="player-list-template" type="text/x-handlebars-template").
+  <div id="player-list" class="scroll-up player-list fixed-bottom">
+    {{#each players}}
+    <div class="player-tag">{{name}}</div>
+    {{/each}}
+  </div>
+
+script(id="player-info-block-template" type='text/x-handlebars-template').
+  <div class="fade-in player-tag">{{name}}</div>
+
+//// START THE VIEWER JS
+script(src="/js/undercover_viewer.js")
+script(type='text/javascript').
+  $(function() {
+    new UndercoverViewer();
+  });

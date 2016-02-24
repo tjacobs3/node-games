@@ -116,6 +116,7 @@ app.get('/js/tictactoe.js', browserify('./client/tictactoe/client.js'));
 app.get('/js/irish_poker.js', browserify('./client/irish_poker/client.js'));
 app.get('/js/irish_poker_viewer.js', browserify('./client/irish_poker/viewer.js'));
 app.get('/js/undercover.js', browserify('./client/undercover/client.js'));
+app.get('/js/undercover_viewer.js', browserify('./client/undercover/viewer.js'));
 
 //***************
 // HELPERS

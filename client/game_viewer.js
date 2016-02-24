@@ -4,9 +4,14 @@ var GameViewer = function() {
 
   this.socket.emit('join game', {gameSlug: this.gameSlug()});
 
+  that = this;
   this.socket.on('player joined', function(msg){
-    $('#players').append($('<div>').text(msg));
+    that.playerAdded(msg);
   });
+};
+
+GameViewer.prototype.playerAdded = function(name) {
+  $('#players').append($('<div>').text(msg));
 };
 
 GameViewer.prototype.gameSlug = function() {

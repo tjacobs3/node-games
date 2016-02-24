@@ -23,12 +23,12 @@ var Undercover = function(io) {
   ];
 
   this.teamSize = {
-    2: [1, 1],
-    5: [3,2],
-    6: [4,2],
-    7: [4,3],
-    8: [5,3],
-    9: [6,3],
+    2:  [1, 1],
+    5:  [3,2],
+    6:  [4,2],
+    7:  [4,3],
+    8:  [5,3],
+    9:  [6,3],
     10: [6,4]
   };
 
@@ -193,6 +193,7 @@ Undercover.prototype.resetVotes = function() {
 
 Undercover.prototype.serialize = function() {
   var that = this;
+  var leaderId = this.players.length === 0 ? null : this.players[this.leader].id;
 
   var players = _.map(this.players, function(player) {
     var onTeam = false;
@@ -210,7 +211,7 @@ Undercover.prototype.serialize = function() {
 
   return {
     status: this.phase,
-    leaderId: this.players[this.leader].id,
+    leaderId: leaderId,
     players: players,
     teamSize: this.roundTeamSize(this.currentRound())
   }

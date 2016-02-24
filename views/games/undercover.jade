@@ -8,12 +8,9 @@ link(rel='stylesheet', href='/css/undercover.css')
 
 div#game-content
 
-#actions
-
-#messages
-
-#team
-
+///////////////////////
+/// WAITING FOR PLAYERS
+///////////////////////
 script(id="waiting-players-template" type='text/x-handlebars-template').
   <div id="start-button" class="button font--large disabled">
     WAITING FOR PLAYERS
@@ -97,7 +94,7 @@ script(id="modal-template" type='text/x-handlebars-template').
     </div>
   </div>
 
-
+//// START THE CLIENT JS
 script(src="/js/undercover.js")
 script(type='text/javascript').
   $(function() {
