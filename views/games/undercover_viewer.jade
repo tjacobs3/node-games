@@ -15,10 +15,16 @@ script(id="waiting-players-template" type='text/x-handlebars-template').
   <h1>Waiting For Players <small class="waitingForPlayersSubHeadline">Looking for at least <span class="playerCount">5</span> more players</small></h1>
   <div id="players" class="player-list"></div>
 
+///////////////////////
+/// WAITING FOR TEAM
+///////////////////////
+script(id="waiting-for-team-template" type='text/x-handlebars-template').
+  <h1>Waiting For {{name}} to pick {{teamsize}} people to send on a mission</h1>
+
 ////////////////
 /// PLAYER LIST
 ////////////////
-script(id="player-list-template" type="text/x-handlebars-template").
+script(id="player-list-sidebar-template" type="text/x-handlebars-template").
   <div id="player-list" class="scroll-up player-list fixed-bottom">
     {{#each players}}
     <div class="player-tag">{{name}}</div>
