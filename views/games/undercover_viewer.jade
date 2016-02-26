@@ -2,11 +2,14 @@ link(rel='stylesheet', href='/css/undercover.css')
 
 #game-info(data-gameSlug=game.slug, data-status=game.serialize(), data-minPlayers=5)
 
-.game-header
-  h1 Undercover
-  h2 #{game.slug}
+.viewer
+  .game-header
+    h1 Undercover
+    h2 #{game.slug}
 
-div#game-content
+  #page-content
+    #player-list-container
+    #game-content
 
 ///////////////////////
 /// WAITING FOR PLAYERS
@@ -25,7 +28,7 @@ script(id="waiting-for-team-template" type='text/x-handlebars-template').
 /// PLAYER LIST
 ////////////////
 script(id="player-list-sidebar-template" type="text/x-handlebars-template").
-  <div id="player-list" class="scroll-up player-list fixed-bottom">
+  <div id="player-list" class="scroll-up player-list-vertical">
     {{#each players}}
     <div class="player-tag">{{name}}</div>
     {{/each}}

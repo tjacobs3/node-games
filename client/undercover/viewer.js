@@ -24,6 +24,8 @@ UndercoverViewer.prototype.setGameState = function(status) {
   this.teamSize = status.teamSize;
 
   if(previousStatus !== this.gameStatus) {
+    if(this.gameStatus !== 'waiting_for_players' && this.gameStatus !== 'waiting_for_start') this.setupIngameUI();
+
     if(this.gameStatus === 'waiting_for_players' || (this.gameStatus === 'waiting_for_start' && !previousStatus)) {
       this.currentState = new WaitingForPlayers(this.players, this.gameInfo.minplayers);
     } else if(this.gameStatus === 'waitingForTeam') {
@@ -43,6 +45,18 @@ UndercoverViewer.prototype.playerAdded = function(name) {
 //***************
 // UI FOR ROUNDS
 //***************
+
+UndercoverViewer.prototype.setupIngameUI = function() {
+  $("#page-content").addClass("game-started");
+  this.setupPlayerList();
+}
+
+UndercoverViewer.prototype.setupPlayerList = function() {
+  var source   = $("#player-list-sidebar-template").html();
+  var template = Handlebars.compile(source);
+
+  $("#player-list-container").html(template({players: this.players}));
+}
 
 UndercoverViewer.prototype.currentLeader = function() {
   var leaderId = this.leaderId;
