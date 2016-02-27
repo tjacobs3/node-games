@@ -32,7 +32,7 @@ var Undercover = function(io) {
     10: [6,4]
   };
 
-  this.phase = "waiting_for_players";
+  this.setPhase("waiting_for_players");
 }
 
 Undercover.gameIdentifier = "undercover";
@@ -71,6 +71,8 @@ Undercover.prototype.startGame = function() {
 
   this.mafia.players = _.sample(this.players, mafiaSize);
   this.fbi.players = _.difference(this.players, this.mafia.players);
+
+  this.leader = Math.floor((Math.random() * this.players.length));
 
   this.startNewRound();
 };
@@ -123,16 +125,35 @@ Undercover.prototype.startNewRound = function(resetTeamFails) {
     resetTeamFails = true;
 
   this.electedPlayers = [];
-  this.phase = "waitingForTeam";
+  this.setPhase("waitingForTeam");
   this.resetVotes();
 
   if(resetTeamFails)
     this.consecutiveTeamFails = 0;
 };
 
+Undercover.prototype.winner = function(resetTeamFails) {
+  if(this.fbi.wins >=3 ) return "FBI";
+  if(this.mafia.wins >= 3) return "Mafia";
+  return null;
+};
+
+Undercover.prototype.gameOver = function() {
+  this.setPhase("finished");
+};
+
 //***************
 // GAME STATES
 //***************
+
+Undercover.prototype.incrementWins = function(team) {
+  team.wins++;
+  if(this.winner()) this.gameOver();
+}
+
+Undercover.prototype.setPhase = function(phase) {
+  if(this.phase !== "finished") this.phase = phase;
+}
 
 Undercover.prototype.checkTeamVotes = function() {
   if(_.any(this.players, function(player) { return player.vote == null }))
@@ -144,10 +165,10 @@ Undercover.prototype.checkTeamVotes = function() {
     this.incrementLeader();
     this.startNewRound(false);
     if(this.consecutiveTeamFails >= Undercover.maxConsecutiveTeamVoteFails) {
-      this.fbi.wins++;
+      this.incrementWins(this.fbi);
     }
   } else if(teamPasses == true) {
-    this.phase = "missionVotes";
+    this.setPhase("missionVotes");
   }
 
   this.resetVotes();
@@ -160,9 +181,9 @@ Undercover.prototype.checkMissionVotes = function() {
   var missionPasses = this.missionPasses();
 
   if(missionPasses == false) {
-    this.fbi.wins++;
+    this.incrementWins(this.fbi);
   } else if(missionPasses == true) {
-    this.mafia.wins++;
+    this.incrementWins(this.mafia);
   }
 
   this.startNewRound();
@@ -175,7 +196,7 @@ Undercover.prototype.setElectedTeam = function(ids) {
     return _.contains(ids, player.id);
   });
 
-  this.phase = "teamVote";
+  this.setPhase("teamVote");
 };
 
 Undercover.prototype.vote = function(playerVote, playerId) {
@@ -214,6 +235,7 @@ Undercover.prototype.serialize = function() {
     status: this.phase,
     leaderId: leaderId,
     players: players,
+    winner: this.winner(),
     teamSize: this.roundTeamSize(this.currentRound())
   }
 }
@@ -247,7 +269,7 @@ Undercover.prototype.playerJoined = function(player) {
   this.io.to(this.slug).emit('player joined', player.name);
 
   if(this.players.length >= this.minPlayers) {
-    this.phase = "waiting_for_start";
+    this.setPhase("waiting_for_start");
   }
 
   this.sendStatus();

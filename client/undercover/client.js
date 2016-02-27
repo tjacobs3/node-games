@@ -7,6 +7,7 @@ var ChoosingTeam = require('./client/choosing_team.js');
 var ApproveTeam = require('./client/approve_team.js');
 var TeamVote = require('./client/team_vote.js');
 var MissionVote = require('./client/mission_vote.js');
+var Finished = require('./client/finished.js');
 
 var Undercover = function() {
   GameClient.call(this);
@@ -46,6 +47,8 @@ Undercover.prototype.setGameState = function(status) {
       this.currentState = this.teamVoteState();
     } else if(this.gameStatus === 'missionVotes') {
       this.currentState = this.missionVoteState();
+    } else if(this.gameStatus === 'finished') {
+      this.currentState = new Finished();
     }
   }
 }
@@ -96,7 +99,16 @@ Undercover.prototype.teamChooseState = function() {
 };
 
 Undercover.prototype.showTeam = function() {
-  this.showModal("The game is about to start", "You are on team " + this.localPlayer().team);
+  var body = "You are on team " + this.localPlayer().team + ".";
+
+  if(this.localPlayer().team === "fbi") {
+    var thisId = this.playerId();
+    var fbiPlayers = _.select(this.players, function(player) {return player.team === "fbi" && player.id !== thisId; });
+    names = _.map(fbiPlayers, function(player) { return player.name; }).join(", ");
+    body = body + " The other FBI members are " + names + ".";
+  };
+
+  this.showModal("The game is about to start", body);
 };
 
 Undercover.prototype.showPlayerList = function() {

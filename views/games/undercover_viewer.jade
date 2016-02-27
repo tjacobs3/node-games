@@ -35,11 +35,28 @@ script(id="team-vote-template" type='text/x-handlebars-template').
     {{/each}}
   </div>
 
+///////////////////////
+/// MISSION VOTE
+///////////////////////
+script(id="mission-vote-template" type='text/x-handlebars-template').
+  <h1>{{name}}'s team is on a mission. Waiting for results</h1>
+  <div class="scroll-up player-list-vertical">
+    {{#each players}}
+      <div class="player-tag">{{name}}</div>
+    {{/each}}
+  </div>
+
+///////////////////////
+/// FINISHED
+///////////////////////
+script(id="finished-template" type='text/x-handlebars-template').
+  <h1>The {{winner}} has won the game!</h1>
+
 ////////////////
 /// PLAYER LIST
 ////////////////
 script(id="player-list-sidebar-template" type="text/x-handlebars-template").
-  <div id="player-list" class="scroll-up player-list-vertical space-around">
+  <div id="player-list" class="player-list-vertical space-around {{#if animated}}'scroll-up'{{/if}}">
     {{#each players}}
     <div>
       <div class="player-tag">

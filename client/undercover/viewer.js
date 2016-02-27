@@ -5,6 +5,8 @@ var Handlebars = require('handlebars');
 var WaitingForPlayers = require('./viewer/waiting_for_players.js');
 var WaitingForTeam = require('./viewer/waiting_for_team.js');
 var TeamVote = require('./viewer/team_vote.js');
+var MissionVote = require('./viewer/mission_vote.js');
+var Finished = require('./viewer/finished.js');
 
 var UndercoverViewer = function() {
   GameViewer.call(this);
@@ -33,6 +35,10 @@ UndercoverViewer.prototype.setGameState = function(status) {
       this.currentState = this.waitingForTeamState();
     } else if(this.gameStatus === 'teamVote') {
       this.currentState = this.teamVoteState();
+    } else if(this.gameStatus === 'missionVotes') {
+      this.currentState = this.missionVoteState();
+    } else if(this.gameStatus === 'finished') {
+      this.currentState = new Finished(status.winner);
     }
   }
 }
@@ -65,7 +71,9 @@ UndercoverViewer.prototype.setupPlayerList = function() {
   var container = $("#player-list-container");
   if(!container.data('isSet')) {
     container.data('isSet', true);
-    container.html(template({players: this.players}));
+    container.html(template({players: this.players, animated: true}));
+  } else {
+    container.html(template({players: this.players, animated: false}));
   }
 }
 
@@ -80,6 +88,10 @@ UndercoverViewer.prototype.waitingForTeamState = function() {
 
 UndercoverViewer.prototype.teamVoteState = function() {
   return new TeamVote(this.currentLeader(), this.team());
+}
+
+UndercoverViewer.prototype.missionVoteState = function() {
+  return new MissionVote(this.currentLeader(), this.team());
 }
 
 ////////////
