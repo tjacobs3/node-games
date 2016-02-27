@@ -35,18 +35,33 @@ VIEWER LAYOUT
 .player-list-vertical {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   height: 100%;
 }
 
 .player-list-vertical .player-tag {
-  margin: 1em;
+  margin: 0.3em 1em;
   background-color: wheat;
+}
+
+.leader-symbol {
+  width: 1em;
+  height: 1em;
+  background-color: blue;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /******************
 COMPONENTS
 ******************/
+
+h1, h2, h3, h4 {
+  text-align: center;
+}
+
+.space-around {
+  justify-content: space-around;
+}
 
 .button.disabled {
   background-color: gray;

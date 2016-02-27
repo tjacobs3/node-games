@@ -24,13 +24,31 @@ script(id="waiting-players-template" type='text/x-handlebars-template').
 script(id="waiting-for-team-template" type='text/x-handlebars-template').
   <h1>Waiting For {{name}} to pick {{teamsize}} people to send on a mission</h1>
 
+///////////////////////
+/// TEAM VOTE
+///////////////////////
+script(id="team-vote-template" type='text/x-handlebars-template').
+  <h1>{{name}} has picked a team.  Vote to approve</h1>
+  <div class="scroll-up player-list-vertical">
+    {{#each players}}
+      <div class="player-tag">{{name}}</div>
+    {{/each}}
+  </div>
+
 ////////////////
 /// PLAYER LIST
 ////////////////
 script(id="player-list-sidebar-template" type="text/x-handlebars-template").
-  <div id="player-list" class="scroll-up player-list-vertical">
+  <div id="player-list" class="scroll-up player-list-vertical space-around">
     {{#each players}}
-    <div class="player-tag">{{name}}</div>
+    <div>
+      <div class="player-tag">
+        {{name}}
+        {{#if isLeader}}
+          <div class="leader-symbol"></div>
+        {{/if}}
+      </div>
+    </div>
     {{/each}}
   </div>
 

@@ -4,6 +4,7 @@ var Handlebars = require('handlebars');
 // Templates
 var WaitingForPlayers = require('./viewer/waiting_for_players.js');
 var WaitingForTeam = require('./viewer/waiting_for_team.js');
+var TeamVote = require('./viewer/team_vote.js');
 
 var UndercoverViewer = function() {
   GameViewer.call(this);
@@ -30,6 +31,8 @@ UndercoverViewer.prototype.setGameState = function(status) {
       this.currentState = new WaitingForPlayers(this.players, this.gameInfo.minplayers);
     } else if(this.gameStatus === 'waitingForTeam') {
       this.currentState = this.waitingForTeamState();
+    } else if(this.gameStatus === 'teamVote') {
+      this.currentState = this.teamVoteState();
     }
   }
 }
@@ -46,6 +49,10 @@ UndercoverViewer.prototype.playerAdded = function(name) {
 // UI FOR ROUNDS
 //***************
 
+UndercoverViewer.prototype.team = function() {
+  return _.select(this.players, function(player) { return player.onTeam; });
+}
+
 UndercoverViewer.prototype.setupIngameUI = function() {
   $("#page-content").addClass("game-started");
   this.setupPlayerList();
@@ -55,7 +62,11 @@ UndercoverViewer.prototype.setupPlayerList = function() {
   var source   = $("#player-list-sidebar-template").html();
   var template = Handlebars.compile(source);
 
-  $("#player-list-container").html(template({players: this.players}));
+  var container = $("#player-list-container");
+  if(!container.data('isSet')) {
+    container.data('isSet', true);
+    container.html(template({players: this.players}));
+  }
 }
 
 UndercoverViewer.prototype.currentLeader = function() {
@@ -65,6 +76,10 @@ UndercoverViewer.prototype.currentLeader = function() {
 
 UndercoverViewer.prototype.waitingForTeamState = function() {
   return new WaitingForTeam(this.currentLeader(), this.teamSize);
+}
+
+UndercoverViewer.prototype.teamVoteState = function() {
+  return new TeamVote(this.currentLeader(), this.team());
 }
 
 ////////////

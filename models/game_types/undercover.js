@@ -198,13 +198,14 @@ Undercover.prototype.serialize = function() {
   var players = _.map(this.players, function(player) {
     var onTeam = false;
 
-    if(that.phase === "missionVotes")
+    if(that.phase === "missionVotes" || that.phase === "teamVote")
       onTeam = _.any(that.electedPlayers, function(electedPlayer) { return player.id === electedPlayer.id});
 
     return {
       id: player.id,
       name: player.name,
       team: that.teamForPlayer(player),
+      isLeader: leaderId == player.id,
       onTeam: onTeam
     }
   });
