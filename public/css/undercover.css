@@ -39,10 +39,11 @@ VIEWER LAYOUT
 }
 
 .viewer .game-started #win-counter-container {
-  width: 100%;
+  width: 70%;
   height: 10%;
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  right: 0;
 }
 
 .viewer .game-started #player-list-container {
