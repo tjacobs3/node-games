@@ -9,7 +9,9 @@ link(rel='stylesheet', href='/css/undercover.css')
 
   #page-content
     #player-list-container
-    #game-content
+    #game-content-container
+      #game-content
+      #win-counter-container
 
 ///////////////////////
 /// WAITING FOR PLAYERS
@@ -47,10 +49,27 @@ script(id="mission-vote-template" type='text/x-handlebars-template').
   </div>
 
 ///////////////////////
+/// TAKEOVER'
+///////////////////////
+script(id="takeover-template" type='text/x-handlebars-template').
+  <div class="takeover fade-out-delayed">
+    {{#each messages}}<div class="content">{{this}}</div>{{/each}}
+  </div>
+
+///////////////////////
 /// FINISHED
 ///////////////////////
 script(id="finished-template" type='text/x-handlebars-template').
   <h1>The {{winner}} has won the game!</h1>
+
+///////////////////////
+/// WIN COUNTER
+///////////////////////
+script(id="win-counter-container-template" type='text/x-handlebars-template').
+  <div id="win-counter"></div>
+
+script(id="win-counter-template" type='text/x-handlebars-template').
+  <div class="counter {{winner}}">{{winner}}</div>
 
 ////////////////
 /// PLAYER LIST

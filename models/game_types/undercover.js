@@ -6,12 +6,13 @@ var Undercover = function(io) {
 
   this.gameIdentifier = Undercover.gameIdentifier;
 
-  this.mafia = new Team();
-  this.fbi = new Team();
+  this.mafia = new Team("mafia");
+  this.fbi = new Team("fbi");
   this.maxPlayers = 10;
   this.minPlayers = 2;
   this.electedPlayers = [];
   this.leader = 0;
+  this.events = [];
   this.consecutiveTeamFails = 0;
 
   this.missionTeamSize = [
@@ -148,6 +149,7 @@ Undercover.prototype.gameOver = function() {
 
 Undercover.prototype.incrementWins = function(team) {
   team.wins++;
+  this.events.push("The " + team.name + " has won the round!");
   if(this.winner()) this.gameOver();
 }
 
@@ -162,12 +164,14 @@ Undercover.prototype.checkTeamVotes = function() {
   var teamPasses = this.teamPasses();
 
   if(teamPasses == false) {
+    this.events.push("The group has voted Against the this team.");
     this.incrementLeader();
     this.startNewRound(false);
     if(this.consecutiveTeamFails >= Undercover.maxConsecutiveTeamVoteFails) {
       this.incrementWins(this.fbi);
     }
   } else if(teamPasses == true) {
+    this.events.push("The team will be going on a mission.");
     this.setPhase("missionVotes");
   }
 
@@ -215,6 +219,8 @@ Undercover.prototype.resetVotes = function() {
 Undercover.prototype.serialize = function() {
   var that = this;
   var leaderId = this.players.length === 0 ? null : this.players[this.leader].id;
+  var evts = this.events;
+  this.events = [];
 
   var players = _.map(this.players, function(player) {
     var onTeam = false;
@@ -236,6 +242,9 @@ Undercover.prototype.serialize = function() {
     leaderId: leaderId,
     players: players,
     winner: this.winner(),
+    mafiaWins: this.mafia.wins,
+    fbiWins: this.fbi.wins,
+    events: evts,
     teamSize: this.roundTeamSize(this.currentRound())
   }
 }
@@ -282,8 +291,9 @@ Undercover.prototype.sendStatus = function() {
 //***************
 // TEAM HELPER CLASS
 //***************
-var Team = function() {
+var Team = function(name) {
   this.players = [];
+  this.name = name;
   this.wins = 0;
 }
 

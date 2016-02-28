@@ -25,6 +25,8 @@ UndercoverViewer.prototype.setGameState = function(status) {
   this.players = status.players;
   this.leaderId = status.leaderId;
   this.teamSize = status.teamSize;
+  this.mafiaWins = status.mafiaWins;
+  this.fbiWins = status.fbiWins;
 
   if(previousStatus !== this.gameStatus) {
     if(this.gameStatus !== 'waiting_for_players' && this.gameStatus !== 'waiting_for_start') this.setupIngameUI();
@@ -41,6 +43,10 @@ UndercoverViewer.prototype.setGameState = function(status) {
       this.currentState = new Finished(status.winner);
     }
   }
+
+  if(status.events && !_.isEmpty(status.events) ) this.showTakeover(status.events);
+
+  this.setWins();
 }
 
 //***************
@@ -92,6 +98,26 @@ UndercoverViewer.prototype.teamVoteState = function() {
 
 UndercoverViewer.prototype.missionVoteState = function() {
   return new MissionVote(this.currentLeader(), this.team());
+}
+
+UndercoverViewer.prototype.setWins = function() {
+  var addFbi = this.fbiWins - $("#win-counter-container .fbi").length;
+  var addMafia = this.mafiaWins - $("#win-counter-container .mafia").length;
+
+  var source   = $("#win-counter-template").html();
+  var template = Handlebars.compile(source);
+
+  _(addFbi).times(function(n){ $("#win-counter-container").append(template({winner: "fbi"})) });
+  _(addMafia).times(function(n){ $("#win-counter-container").append(template({winner: "mafia"})) });
+}
+
+UndercoverViewer.prototype.showTakeover = function(messages) {
+  var source   = $("#takeover-template").html();
+  var template = Handlebars.compile(source);
+  var takeover = $(template({messages: messages}))
+
+  $("body").append(takeover);
+  setTimeout(function(){ takeover.remove() }, 5000);
 }
 
 ////////////
