@@ -7,7 +7,7 @@ VIEWER LAYOUT
   width: 100%;
   height: 25%;
   top: 0;
-  background-color: brown;
+  background-color: beige;
 }
 
 .viewer #page-content {
@@ -78,6 +78,16 @@ COMPONENTS
 
 h1, h2, h3, h4 {
   text-align: center;
+}
+
+.button-inputs {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.button-inputs button {
+  margin: 1em;
 }
 
 .space-around {

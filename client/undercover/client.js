@@ -32,9 +32,6 @@ Undercover.prototype.setGameState = function(status) {
       this.currentState = new WaitingForPlayers(this.players);
     }
 
-    if(this.gameStatus !== 'waiting_for_players' && this.gameStatus !== 'waiting_for_start')
-      this.showPlayerList();
-
     if(this.gameStatus === 'waiting_for_start') {
       this.currentState.enableStartButton(this.startGame.bind(this));
     } else if(this.gameStatus === 'waitingForTeam') {
@@ -110,15 +107,6 @@ Undercover.prototype.showTeam = function() {
 
   this.showModal("The game is about to start", body);
 };
-
-Undercover.prototype.showPlayerList = function() {
-  if($("#player-list").length) return;
-
-  var source   = $("#player-list-template").html();
-  var template = Handlebars.compile(source);
-
-  $("body").append($(template({players: this.players})));
-}
 
 /////////////////
 // SOCKET ACTIONS
